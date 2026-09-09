@@ -1,0 +1,3033 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامج عمران لإدارة الأسطول المطور | شركة وتد الحياة للخدمات اللوجستية</title>
+
+    <!-- Bootstrap 5 RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0f2a4a;
+            --primary-hover: #1e3a8a;
+            --secondary-color: #0d9488;
+            --accent-color: #f59e0b;
+            --bg-body: #f1f5f9;
+            --card-bg: #ffffff;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #1e3a8a;
+            --primary-hover: #3b82f6;
+            --secondary-color: #14b8a6;
+            --bg-body: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-size: 0.95rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+
+        .shadow-soft {
+            box-shadow: 0 4px 20px -2px rgba(15, 42, 74, 0.08);
+        }
+        .rounded-xl {
+            border-radius: 12px !important;
+        }
+        .rounded-2xl {
+            border-radius: 18px !important;
+        }
+
+        #app-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        #sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #0f2a4a 0%, #091b30 100%);
+            color: #ffffff;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 1040;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+        }
+
+        #sidebar .brand-header {
+            padding: 20px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .brand-logo-svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+        }
+
+        .company-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #f8fafc;
+            letter-spacing: 0.3px;
+        }
+
+        .software-title {
+            font-size: 0.8rem;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            padding: 15px 10px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link-custom i {
+            width: 28px;
+            font-size: 1.15rem;
+            text-align: center;
+            margin-left: 10px;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            background: linear-gradient(90deg, #0d9488 0%, #0f766e 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .sidebar-footer {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .sidebar-footer .dev-credits {
+            color: #94a3b8;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .contact-quick-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            margin: 0 4px;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .contact-quick-btn:hover {
+            transform: scale(1.15);
+            color: white;
+        }
+
+        .btn-whatsapp { background-color: #22c55e; }
+        .btn-phone { background-color: #0284c7; }
+
+        #main-container {
+            margin-right: var(--sidebar-width);
+            flex-grow: 1;
+            min-width: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #top-header {
+            height: var(--header-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
+
+        .search-wrapper {
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .search-wrapper input {
+            padding-right: 40px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        #page-content {
+            padding: 25px;
+            flex-grow: 1;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .quick-action-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: var(--text-main);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(13, 148, 136, 0.15);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .quick-action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        #login-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #0f2a4a 0%, #030712 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 440px;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        .table-custom {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-custom th {
+            background-color: var(--bg-body);
+            color: var(--text-muted);
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-color);
+            padding: 14px 16px;
+            white-space: nowrap;
+        }
+
+        .table-custom td {
+            padding: 12px 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .printable-letterhead {
+            border-bottom: 3px double #0f2a4a;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .badge-city {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 10pt;
+            }
+            #sidebar, #top-header, .no-print, .btn, .dataTables_filter, .modal-footer {
+                display: none !important;
+            }
+            #main-container {
+                margin-right: 0 !important;
+                padding: 0 !important;
+            }
+            #page-content {
+                padding: 0 !important;
+            }
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .table-custom {
+                border: 1px solid #000 !important;
+            }
+            .table-custom th, .table-custom td {
+                border: 1px solid #000 !important;
+                padding: 6px 8px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            #sidebar {
+                transform: translateX(100%);
+            }
+            #sidebar.show {
+                transform: translateX(0);
+            }
+            #main-container {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="login-card">
+            <div class="mb-3">
+                <svg class="brand-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="#0f2a4a" stroke="#f59e0b" stroke-width="3"/>
+                    <path d="M50 15 L78 30 L78 65 L50 85 L22 65 L22 30 Z" fill="none" stroke="#0d9488" stroke-width="3"/>
+                    <path d="M35 45 L50 32 L65 45 L65 65 L35 65 Z" fill="#f59e0b"/>
+                    <path d="M50 32 L50 65" stroke="#0f2a4a" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="8" fill="#ffffff"/>
+                </svg>
+            </div>
+            <h4 class="fw-bold mb-1">شركة وتد الحياة للخدمات اللوجستية</h4>
+            <p class="text-muted mb-4 fs-6">برنامج عمران لإدارة الأسطول المطور</p>
+            
+            <form id="login-form">
+                <div class="text-start mb-3">
+                    <label class="form-label fw-bold">اسم المستخدم</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fa-solid fa-user text-muted"></i></span>
+                        <input type="text" id="login-username" class="form-control" placeholder="أدخل اسم المستخدم" required>
+                    </div>
+                </div>
+                <div class="text-start mb-2">
+                    <label class="form-label fw-bold">كلمة المرور</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fa-solid fa-lock text-muted"></i></span>
+                        <input type="password" id="login-password" class="form-control" placeholder="أدخل كلمة المرور" required>
+                    </div>
+                </div>
+                
+                <div class="text-end mb-4">
+                    <a href="#" class="text-decoration-none small text-primary fw-bold" onclick="handleForgotPassword(event)">
+                        <i class="fa-solid fa-key me-1"></i> نسيت كلمة المرور؟ (إعادة تعيين عبر SMS)
+                    </a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2.5 rounded-xl fw-bold shadow-sm text-white" style="background: linear-gradient(135deg, #0f2a4a, #0d9488); border:none;">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> تسجيل الدخول للنظام
+                </button>
+            </form>
+            <div class="mt-4 pt-3 border-top text-muted small">
+                برمجيات وإدارة الأسطول المتكاملة &copy; 2026
+            </div>
+        </div>
+    </div>
+
+    <div id="app-wrapper">
+
+        <aside id="sidebar">
+            <div class="brand-header">
+                <svg class="brand-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="#0f2a4a" stroke="#f59e0b" stroke-width="3"/>
+                    <path d="M50 15 L78 30 L78 65 L50 85 L22 65 L22 30 Z" fill="none" stroke="#0d9488" stroke-width="3"/>
+                    <path d="M35 45 L50 32 L65 45 L65 65 L35 65 Z" fill="#f59e0b"/>
+                    <path d="M50 32 L50 65" stroke="#0f2a4a" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="8" fill="#ffffff"/>
+                </svg>
+                <div class="company-title">شركة وتد الحياة للخدمات اللوجستية</div>
+                <div class="software-title"><i class="fa-solid fa-truck-fast me-1"></i> برنامج عمران لإدارة الأسطول</div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-link-custom active" data-page="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="#" class="nav-link-custom" data-page="employees">
+                    <i class="fa-solid fa-id-card"></i>
+                    <span>سجل المناديب والموظفين</span>
+                </a>
+                <a href="#" class="nav-link-custom" data-page="vehicles">
+                    <i class="fa-solid fa-truck-pickup"></i>
+                    <span>سجل المركبات والأسطول</span>
+                </a>
+                <a href="#" class="nav-link-custom" data-page="assignments">
+                    <i class="fa-solid fa-key"></i>
+                    <span>ربط وتسليم المركبات</span>
+                </a>
+                <a href="#" class="nav-link-custom" data-page="companies">
+                    <i class="fa-solid fa-building"></i>
+                    <span>الشركات المشغلة</span>
+                </a>
+                <a href="#" class="nav-link-custom" data-page="reports">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>التقارير الشاملة المتقدمة</span>
+                </a>
+                <a href="#" class="nav-link-custom" data-page="users">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span>إدارة المستخدمين</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="dev-credits">
+                    <i class="fa-solid fa-code me-1"></i> تصميم المهندس محمد حمود عمران
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="https://wa.me/966500000000" target="_blank" class="contact-quick-btn btn-whatsapp" title="واتساب المهندس">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                    <a href="tel:+966500000000" class="contact-quick-btn btn-phone" title="إتصال هاتف">
+                        <i class="fa-solid fa-phone"></i>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <div id="main-container">
+            <header id="top-header" class="no-print">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-light d-lg-none" id="mobile-sidebar-toggle">
+                        <i class="fa-solid fa-bars fs-5"></i>
+                    </button>
+                    <div class="search-wrapper d-none d-md-block">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="global-search-input" class="form-control" placeholder="بحث شامل (اسم، مدينة، هوية، رقم لوحة، شركة)...">
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+                    <div class="dropdown me-1">
+                        <button class="btn btn-light rounded-circle position-relative p-2" type="button" data-bs-toggle="dropdown" title="مركز التنبيهات">
+                            <i class="fa-solid fa-bell text-warning fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notifications-badge">0</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-2xl p-3" style="width: 320px;" id="notifications-dropdown">
+                            <h6 class="fw-bold border-bottom pb-2 mb-2"><i class="fa-solid fa-triangle-exclamation text-danger me-1"></i>تنبيهات النظام الذكية</h6>
+                            <div id="notifications-list" class="small text-muted">لا توجد تنبيهات عاجلة الان</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-light rounded-circle p-2 me-2" onclick="toggleTheme()" title="تبديل الوضع الليلي / النهاري">
+                        <i class="fa-solid fa-moon text-primary fs-5" id="theme-icon"></i>
+                    </button>
+
+                    <button class="btn btn-outline-primary btn-sm rounded-pill fw-semibold" id="btn-export-json" title="تصدير قاعدة البيانات كاملة JSON">
+                        <i class="fa-solid fa-download me-1"></i> JSON
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm rounded-pill fw-semibold" id="btn-import-json" title="استيراد نسخة احتياطية JSON">
+                        <i class="fa-solid fa-upload me-1"></i> JSON
+                    </button>
+                    <input type="file" id="json-file-input" accept=".json" class="d-none">
+
+                    <button class="btn btn-success btn-sm rounded-pill fw-bold text-white shadow-sm" id="btn-export-excel" title="تصدير كافة بيانات الأسطول إلى إكسل XLSX">
+                        <i class="fa-solid fa-file-excel me-1"></i> تصدير إكسل الشامل
+                    </button>
+
+                    <div class="vr mx-2"></div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-light border rounded-pill d-flex align-items-center gap-2 px-3 py-1" type="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-circle-user text-primary fs-5"></i>
+                            <span id="current-user-name" class="fw-bold small">محمد عمران</span>
+                            <i class="fa-solid fa-chevron-down small text-muted"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-xl mt-2">
+                            <li><a class="dropdown-item text-danger fw-bold" href="#" id="btn-lock-system"><i class="fa-solid fa-lock me-2"></i> قفل النظام / خروج</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <main id="page-content">
+
+                <section id="page-dashboard" class="page-view">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div>
+                            <h3 class="fw-extrabold mb-1" style="color: var(--primary-color);">لوحة التحكم والمؤشرات الرئيسية</h3>
+                            <p class="text-muted mb-0">نظرة عامة على حالة الأسطول، المدن، والكادر اللوجستي لـ شركة وتد الحياة</p>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-2 rounded-pill fs-6" id="live-time-badge">...</span>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="fw-bold text-muted mb-3"><i class="fa-solid fa-bolt text-warning me-2"></i>الخيارات والعمليات السريعة</h6>
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div class="quick-action-btn" onclick="openEmployeeModal()">
+                                    <div class="quick-action-icon bg-primary">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-extrabold fs-6">إضافة مندوب</div>
+                                        <small class="text-muted">تسجيل سائق / مندوب بمدينة محددة</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div class="quick-action-btn" onclick="openVehicleModal()">
+                                    <div class="quick-action-icon bg-warning">
+                                        <i class="fa-solid fa-car"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-extrabold fs-6">إضافة مركبة</div>
+                                        <small class="text-muted">إدراج سيارة بشركة مالكة/مؤجرة</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div class="quick-action-btn" onclick="openAssignmentModal()">
+                                    <div class="quick-action-icon bg-success">
+                                        <i class="fa-solid fa-key"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-extrabold fs-6">تفويض مركبة</div>
+                                        <small class="text-muted">ربط سيارة بمندوب وتفويضها</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div class="quick-action-btn" onclick="switchPage('reports')">
+                                    <div class="quick-action-icon bg-info">
+                                        <i class="fa-solid fa-chart-line"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-extrabold fs-6">التقارير المفلترة</div>
+                                        <small class="text-muted">فلترة حسب المدينة والشركات</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="stat-card">
+                                <div>
+                                    <div class="text-muted small fw-bold">إجمالي المناديب</div>
+                                    <h3 class="fw-extrabold mb-0 mt-1" id="stat-total-emp">0</h3>
+                                    <span class="text-success small fw-semibold"><i class="fa-solid fa-users me-1"></i>نشط بالخدمة</span>
+                                </div>
+                                <div class="stat-icon bg-primary-subtle text-primary">
+                                    <i class="fa-solid fa-users-gear"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="stat-card">
+                                <div>
+                                    <div class="text-muted small fw-bold">سائقين (كفالة / فري لانسر)</div>
+                                    <h3 class="fw-extrabold mb-0 mt-1"><span id="stat-kafala-emp">0</span> / <span id="stat-freelance-emp">0</span></h3>
+                                    <span class="text-info small fw-semibold"><i class="fa-solid fa-handshake me-1"></i>توزيع العقود</span>
+                                </div>
+                                <div class="stat-icon bg-info-subtle text-info">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="stat-card">
+                                <div>
+                                    <div class="text-muted small fw-bold">إجمالي المركبات</div>
+                                    <h3 class="fw-extrabold mb-0 mt-1" id="stat-total-veh">0</h3>
+                                    <span class="text-warning small fw-semibold"><i class="fa-solid fa-car me-1"></i>مركبات الأسطول</span>
+                                </div>
+                                <div class="stat-icon bg-warning-subtle text-warning">
+                                    <i class="fa-solid fa-truck"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="stat-card">
+                                <div>
+                                    <div class="text-muted small fw-bold">السيارات المفوضة</div>
+                                    <h3 class="fw-extrabold mb-0 mt-1"><span id="stat-auth-veh">0</span> <small class="fs-6 text-muted">/ <span id="stat-unauth-veh">0</span> غير مفوضة</small></h3>
+                                    <span class="text-success small fw-semibold"><i class="fa-solid fa-shield-check me-1"></i>حالة التفاويض</span>
+                                </div>
+                                <div class="stat-icon bg-success-subtle text-success">
+                                    <i class="fa-solid fa-key"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-lg-7">
+                            <div class="card border-0 shadow-soft rounded-2xl p-4 h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-bold mb-0"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>آخر التفاويض المسجلة</h5>
+                                    <button class="btn btn-sm btn-light rounded-pill" onclick="switchPage('assignments')">عرض الكل</button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-custom mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>المندوب</th>
+                                                <th>اللوحة</th>
+                                                <th>تاريخ التفويض</th>
+                                                <th>الحالة</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dash-recent-assignments">
+                                            <!-- JS Populated -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5">
+                            <div class="card border-0 shadow-soft rounded-2xl p-4 h-100">
+                                <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie text-secondary me-2"></i>توزيع المناديب حسب الشركات المشغلة</h5>
+                                <div id="dash-apps-distribution" class="list-group list-group-flush">
+                                    <!-- JS Populated -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="page-employees" class="page-view d-none">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                        <div>
+                            <h3 class="fw-extrabold mb-1" style="color: var(--primary-color);">سجل المناديب والموظفين</h3>
+                            <p class="text-muted mb-0">إدارة بيانات المناديب، المدن/المناطق، العقود، والتطبيقات المشغلة</p>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-primary rounded-xl fw-bold shadow-sm px-3" onclick="openEmployeeModal()">
+                                <i class="fa-solid fa-user-plus me-1"></i> إضافة مندوب جديد
+                            </button>
+                            <button class="btn btn-success rounded-xl fw-bold px-3 text-white" onclick="triggerImportExcel('employees')">
+                                <i class="fa-solid fa-file-import me-1"></i> استيراد من إكسل
+                            </button>
+                            <button class="btn btn-outline-success rounded-xl fw-bold px-3" onclick="exportEmployeesToExcel()">
+                                <i class="fa-solid fa-file-excel me-1"></i> تصدير إكسل
+                            </button>
+                            <button class="btn btn-outline-secondary rounded-xl fw-bold px-3" onclick="downloadSampleTemplate('employees')">
+                                <i class="fa-solid fa-download me-1"></i> نموذج الإكسل
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-soft rounded-xl p-3 mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <input type="text" id="emp-filter-search" class="form-control rounded-pill" placeholder="بحث بالاسم، الهوية، الجوال...">
+                            </div>
+                            <div class="col-md-3">
+                                <select id="emp-filter-city" class="form-select rounded-pill">
+                                    <option value="">جميع المدن / المناطق</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="emp-filter-contract" class="form-select rounded-pill">
+                                    <option value="">جميع أنواع العقود</option>
+                                    <option value="كفالة">كفالة</option>
+                                    <option value="فري لانسر">فري لانسر</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="emp-filter-app" class="form-select rounded-pill">
+                                    <option value="">جميع التطبيقات المشغلة</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-soft rounded-2xl overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-custom align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>اسم المندوب</th>
+                                        <th>الأيدي (ID)</th>
+                                        <th>رقم الهوية</th>
+                                        <th>الجوال</th>
+                                        <th>المدينة / المنطقة</th>
+                                        <th>العقد</th>
+                                        <th>حساب التطبيق</th>
+                                        <th>الشركة المشغلة</th>
+                                        <th>السيارة واللوحة</th>
+                                        <th>المشرف المسؤول</th>
+                                        <th class="no-print">إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employees-table-body">
+                                    <!-- JS Populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="page-vehicles" class="page-view d-none">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                        <div>
+                            <h3 class="fw-extrabold mb-1" style="color: var(--primary-color);">سجل المركبات والأسطول</h3>
+                            <p class="text-muted mb-0">إدارة السيارات، الشركات المؤجرة/الممولة، المدن، وحالات التفويض</p>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-primary rounded-xl fw-bold shadow-sm px-3" onclick="openVehicleModal()">
+                                <i class="fa-solid fa-car-tunnel me-1"></i> إضافة سيارة جديدة
+                            </button>
+                            <button class="btn btn-success rounded-xl fw-bold px-3 text-white" onclick="triggerImportExcel('vehicles')">
+                                <i class="fa-solid fa-file-import me-1"></i> استيراد من إكسل
+                            </button>
+                            <button class="btn btn-outline-success rounded-xl fw-bold px-3" onclick="exportVehiclesToExcel()">
+                                <i class="fa-solid fa-file-excel me-1"></i> تصدير إكسل
+                            </button>
+                            <button class="btn btn-outline-secondary rounded-xl fw-bold px-3" onclick="downloadSampleTemplate('vehicles')">
+                                <i class="fa-solid fa-download me-1"></i> نموذج الإكسل
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-soft rounded-xl p-3 mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <input type="text" id="veh-filter-search" class="form-control rounded-pill" placeholder="بحث برقم اللوحة، الموديل...">
+                            </div>
+                            <div class="col-md-3">
+                                <select id="veh-filter-city" class="form-select rounded-pill">
+                                    <option value="">جميع المدن / المناطق</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="veh-filter-owner" class="form-select rounded-pill">
+                                    <option value="">جميع الشركات المالكة / المؤجرة</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="veh-filter-status" class="form-select rounded-pill">
+                                    <option value="">جميع حالات المركبة</option>
+                                    <option value="متاحة">متاحة</option>
+                                    <option value="مفوضة">مفوضة</option>
+                                    <option value="صيانة">صيانة</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-soft rounded-2xl overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-custom align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>رقم اللوحة</th>
+                                        <th>نوع المركبة / الموديل</th>
+                                        <th>السنة / اللون</th>
+                                        <th>الشركة المالكة / المؤجرة</th>
+                                        <th>المدينة / المنطقة</th>
+                                        <th>مفوضة؟</th>
+                                        <th>السائق المفوض حالياً</th>
+                                        <th>فترة التفويض</th>
+                                        <th>حالة المركبة</th>
+                                        <th class="no-print">إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vehicles-table-body">
+                                    <!-- JS Populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="page-assignments" class="page-view d-none">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                        <div>
+                            <h3 class="fw-extrabold mb-1" style="color: var(--primary-color);">تسليم وربط المركبات (التفاويض)</h3>
+                            <p class="text-muted mb-0">ربط المندوب بالمركبة وطباعة بوليصة وإشعار التفويض الرسمي ومشاركته واتساب</p>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-primary rounded-xl fw-bold shadow-sm px-3" onclick="openAssignmentModal()">
+                                <i class="fa-solid fa-key me-1"></i> إصدار تفويض / تسليم سيارة
+                            </button>
+                            <button class="btn btn-success rounded-xl fw-bold px-3 text-white" onclick="triggerImportExcel('assignments')">
+                                <i class="fa-solid fa-file-import me-1"></i> استيراد من إكسل
+                            </button>
+                            <button class="btn btn-outline-success rounded-xl fw-bold px-3" onclick="exportAssignmentsToExcel()">
+                                <i class="fa-solid fa-file-excel me-1"></i> تصدير إكسل
+                            </button>
+                            <button class="btn btn-outline-secondary rounded-xl fw-bold px-3" onclick="downloadSampleTemplate('assignments')">
+                                <i class="fa-solid fa-download me-1"></i> نموذج الإكسل
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-soft rounded-2xl overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-custom align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th># كود التفويض</th>
+                                        <th>المندوب / الموظف</th>
+                                        <th>المدينة / المنطقة</th>
+                                        <th>رقم الهوية</th>
+                                        <th>رقم اللوحة</th>
+                                        <th>نوع المركبة</th>
+                                        <th>تاريخ بداية التفويض</th>
+                                        <th>تاريخ نهاية التفويض</th>
+                                        <th>الملاحظات</th>
+                                        <th class="no-print">طباعة / واتساب / إلغاء</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="assignments-table-body">
+                                    <!-- JS Populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="page-companies" class="page-view d-none">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                        <div>
+                            <h3 class="fw-extrabold mb-1" style="color: var(--primary-color);">الشركات والتطبيقات المشغلة</h3>
+                            <p class="text-muted mb-0">إدارة قائمة تطبيقات التوصيل المشغلة (كيتا، هنقرستيشن، نينجا، ذاشيفز...)</p>
+                        </div>
+                        <button class="btn btn-primary rounded-xl fw-bold shadow-sm px-3" onclick="openCompanyModal()">
+                            <i class="fa-solid fa-plus me-1"></i> إضافة شركة مشغلة
+                        </button>
+                    </div>
+
+                    <div class="row g-4" id="companies-cards-container">
+                        <!-- JS Populated Cards -->
+                    </div>
+                </section>
+
+                <section id="page-reports" class="page-view d-none">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 no-print">
+                        <div>
+                            <h3 class="fw-extrabold mb-1" style="color: var(--primary-color);"><i class="fa-solid fa-file-circle-check text-success me-2"></i>نظام التقارير الشاملة والفلترة المتقدمة</h3>
+                            <p class="text-muted mb-0">توليد تقارير مفلترة حسب المدينة، الشركة المشغلة، والشركة المالكة مع إمكانية التصدير والطباعة A4</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-success rounded-xl fw-bold px-3" onclick="exportFilteredReportToExcel()">
+                                <i class="fa-solid fa-file-excel me-2"></i>تصدير التقرير المفلتر Excel
+                            </button>
+                            <button class="btn btn-dark rounded-xl fw-bold px-4" onclick="window.print()">
+                                <i class="fa-solid fa-print me-2"></i>طباعة التقرير A4
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CONTROL FILTERS CARD -->
+                    <div class="card border-0 shadow-soft rounded-2xl p-4 mb-4 no-print" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1px solid #cbd5e1 !important;">
+                        <h6 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-sliders me-2"></i>خيارات الفلترة والتصفية الثلاثية:</h6>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small text-muted">1. الفلترة حسب المدينة / المنطقة</label>
+                                <select id="rep-filter-city" class="form-select rounded-xl fw-bold border-primary-subtle" onchange="generateComprehensiveReport()">
+                                    <option value="">🏙️ جميع المدن والمناطق</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small text-muted">2. الفلترة حسب الشركة المشغلة</label>
+                                <select id="rep-filter-operating-app" class="form-select rounded-xl fw-bold border-primary-subtle" onchange="generateComprehensiveReport()">
+                                    <option value="">📱 جميع الشركات المشغلة (التطبيقات)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold small text-muted">3. الفلترة حسب الشركة المالكة/المؤجرة</label>
+                                <select id="rep-filter-owner-company" class="form-select rounded-xl fw-bold border-primary-subtle" onchange="generateComprehensiveReport()">
+                                    <option value="">🏢 جميع الشركات المالكة / المؤجرة</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button class="btn btn-light w-100 rounded-xl fw-bold border" onclick="resetReportFilters()">
+                                    <i class="fa-solid fa-rotate me-1"></i> إعادة ضبط الفلاتر
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DYNAMIC FILTER SUMMARY METRICS -->
+                    <div class="row g-3 mb-4 no-print" id="report-summary-cards">
+                        <!-- JS Populated Summary Cards -->
+                    </div>
+
+                    <!-- REPORT PRINT CONTAINER -->
+                    <div id="report-printable-area" class="card border-0 shadow-soft rounded-2xl p-4">
+                        <!-- JS Populated Report Header & Table -->
+                    </div>
+                </section>
+
+                <section id="page-users" class="page-view d-none">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                        <div>
+                            <h3 class="fw-extrabold mb-1" style="color: var(--primary-color);">إدارة مستخدمي النظام</h3>
+                            <p class="text-muted mb-0">التحكم بحسابات الدخول، كلمات المرور، وتجميد/تنشيط الحسابات</p>
+                        </div>
+                        <button class="btn btn-primary rounded-xl fw-bold shadow-sm px-3" onclick="openUserModal()">
+                            <i class="fa-solid fa-user-shield me-1"></i> إضافة مستخدم جديد
+                        </button>
+                    </div>
+
+                    <div class="card border-0 shadow-soft rounded-2xl overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-custom align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>اسم المستخدم</th>
+                                        <th>الصفة / الدور</th>
+                                        <th>حالة الحساب</th>
+                                        <th>تاريخ الإضافة</th>
+                                        <th class="no-print">إجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body">
+                                    <!-- JS Populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Hidden Generic Excel Input File Element -->
+    <input type="file" id="excel-generic-file-input" accept=".xlsx, .xls, .csv" class="d-none">
+
+    <!-- EMPLOYEE MODAL -->
+    <div class="modal fade" id="modal-employee" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-2xl shadow-lg">
+                <div class="modal-header bg-primary text-white rounded-top-2xl" style="background: var(--primary-color) !important;">
+                    <h5 class="modal-header-title fw-bold mb-0" id="emp-modal-title">إضافة مندوب جديد</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form-employee">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="emp-id-hidden">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">اسم المندوب الكامل <span class="text-danger">*</span></label>
+                                <input type="text" id="emp-name" class="form-control" required placeholder="أدخل الاسم الثلاثي">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">رقم الهوية / الإقامة <span class="text-danger">*</span></label>
+                                <input type="text" id="emp-national-id" class="form-control" required placeholder="10 أرقام">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">الرقم الوظيفي (الأيدي) <span class="text-danger">*</span></label>
+                                <input type="text" id="emp-code" class="form-control" required placeholder="مثال: EMP-101">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">رقم الجوال <span class="text-danger">*</span></label>
+                                <input type="text" id="emp-mobile" class="form-control" required placeholder="05xxxxxxxx">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">المدينة / المنطقة <span class="text-danger">*</span></label>
+                                <input type="text" id="emp-region" class="form-control" required placeholder="الرياض، جدة، الدمام، مكة المكرمة...">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">نوع العقد <span class="text-danger">*</span></label>
+                                <select id="emp-contract-type" class="form-select" required onchange="toggleFreelancerFields()">
+                                    <option value="كفالة">كفالة</option>
+                                    <option value="فري لانسر">فري لانسر</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">اسم حساب التطبيق <small class="text-muted">(للفري لانسر)</small></label>
+                                <input type="text" id="emp-app-account" class="form-control" placeholder="اسم الحساب بالتطبيق" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">الشركة المشغلة (التطبيق) <span class="text-danger">*</span></label>
+                                <select id="emp-operating-app" class="form-select" required>
+                                    <!-- JS Dynamic -->
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">المشرف المسؤول</label>
+                                <input type="text" id="emp-supervisor" class="form-control" placeholder="اسم المشرف المباشر">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">السيارة المسندة (اختياري)</label>
+                                <select id="emp-vehicle-select" class="form-select">
+                                    <option value="">بدون سيارة حالياً</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light rounded-bottom-2xl">
+                        <button type="button" class="btn btn-light rounded-xl" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary rounded-xl px-4 fw-bold">حفظ البيانات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- VEHICLE MODAL -->
+    <div class="modal fade" id="modal-vehicle" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-2xl shadow-lg">
+                <div class="modal-header bg-primary text-white rounded-top-2xl" style="background: var(--primary-color) !important;">
+                    <h5 class="modal-header-title fw-bold mb-0" id="veh-modal-title">إضافة مركبة جديدة</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form-vehicle">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="veh-id-hidden">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">رقم اللوحة <span class="text-danger">*</span></label>
+                                <input type="text" id="veh-plate" class="form-control" required placeholder="مثال: أ ب ج 1234">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">الشركة المالكة / المؤجرة <span class="text-danger">*</span></label>
+                                <input type="text" id="veh-ownership" class="form-control" required placeholder="مثال: شركة يلو / تمويل الراجحي">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">نوع السيارة / الموديل <span class="text-danger">*</span></label>
+                                <input type="text" id="veh-model" class="form-control" required placeholder="تويوتا يارس / هيونداي أكسنت">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">سنة الصنع</label>
+                                <input type="number" id="veh-year" class="form-control" placeholder="2024">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">اللون</label>
+                                <input type="text" id="veh-color" class="form-control" placeholder="أبيض / أبيض لؤلؤي">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">المدينة / المنطقة <span class="text-danger">*</span></label>
+                                <input type="text" id="veh-region" class="form-control" required placeholder="الرياض / جدة / الدمام">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">حالة السيارة</label>
+                                <select id="veh-status" class="form-select">
+                                    <option value="متاحة">متاحة</option>
+                                    <option value="مفوضة">مفوضة</option>
+                                    <option value="صيانة">صيانة</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">ملاحظات</label>
+                                <textarea id="veh-notes" class="form-control" rows="2" placeholder="أي معلومات أو أضرار سابقة..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light rounded-bottom-2xl">
+                        <button type="button" class="btn btn-light rounded-xl" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary rounded-xl px-4 fw-bold">حفظ السيارة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASSIGNMENT MODAL -->
+    <div class="modal fade" id="modal-assignment" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-2xl shadow-lg">
+                <div class="modal-header bg-success text-white rounded-top-2xl" style="background: var(--secondary-color) !important;">
+                    <h5 class="modal-header-title fw-bold mb-0"><i class="fa-solid fa-key me-2"></i>ربط وتسليم سيارة لمندوب</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form-assignment">
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">اختيار المندوب / الموظف <span class="text-danger">*</span></label>
+                                <select id="assign-emp-select" class="form-select" required onchange="onAssignEmpChange()">
+                                    <option value="">-- اختر مندوب --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">اختيار المركبة / اللوحة <span class="text-danger">*</span></label>
+                                <select id="assign-veh-select" class="form-select" required onchange="onAssignVehChange()">
+                                    <option value="">-- اختر مركبة --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="p-3 bg-light rounded-xl border border-secondary-subtle">
+                                    <div class="row text-muted small">
+                                        <div class="col-md-6"><strong>بيانات المندوب والمدينة:</strong> <span id="assign-emp-preview">لم يتم الاختيار</span></div>
+                                        <div class="col-md-6"><strong>بيانات المركبة والملكية:</strong> <span id="assign-veh-preview">لم يتم الاختيار</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">تاريخ بداية التفويض</label>
+                                <input type="date" id="assign-start-date" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">تاريخ نهاية التفويض</label>
+                                <input type="date" id="assign-end-date" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">ملاحظات التفويض والاستلام</label>
+                                <textarea id="assign-notes" class="form-control" rows="2" placeholder="حالة السيارة عند الاستلام، قراءة العداد..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light rounded-bottom-2xl">
+                        <button type="button" class="btn btn-light rounded-xl" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-success rounded-xl px-4 fw-bold">إصدار التفويض والربط</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- USER MODAL -->
+    <div class="modal fade" id="modal-user" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-2xl shadow-lg">
+                <div class="modal-header bg-dark text-white rounded-top-2xl">
+                    <h5 class="modal-header-title fw-bold mb-0">إضافة مستخدم جديد للنظام</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form-user">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">اسم المستخدم <span class="text-danger">*</span></label>
+                            <input type="text" id="user-username" class="form-control" required placeholder="اسم المستخدم للدخول">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">كلمة المرور <span class="text-danger">*</span></label>
+                            <input type="password" id="user-password" class="form-control" required placeholder="كلمة المرور">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">الدور / الصلاحية</label>
+                            <select id="user-role" class="form-select">
+                                <option value="مدير أسطول">مدير أسطول</option>
+                                <option value="مشرف حركة">مشرف حركة</option>
+                                <option value="مدخل بيانات">مدخل بيانات</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light rounded-bottom-2xl">
+                        <button type="button" class="btn btn-light rounded-xl" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-dark rounded-xl px-4 fw-bold">إنشاء الحساب</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPANY MODAL -->
+    <div class="modal fade" id="modal-company" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-2xl shadow-lg">
+                <div class="modal-header bg-primary text-white rounded-top-2xl">
+                    <h5 class="modal-header-title fw-bold mb-0">إضافة شركة / تطبيق مشغل</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="form-company">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">اسم الشركة المشغلة <span class="text-danger">*</span></label>
+                            <input type="text" id="company-name" class="form-control" required placeholder="مثال: كيتا، هنقرستيشن...">
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light rounded-bottom-2xl">
+                        <button type="button" class="btn btn-light rounded-xl" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary rounded-xl px-4 fw-bold">حفظ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- OFFICIAL AUTHORIZATION SLIP PRINT MODAL -->
+    <div class="modal fade" id="modal-print-voucher" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-2xl">
+                <div class="modal-header bg-dark text-white no-print">
+                    <h5 class="fw-bold mb-0"><i class="fa-solid fa-file-contract me-2"></i>إشعار وتفويض استلام مركبة</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="voucher-printable-area">
+                    <!-- Dynamic Official Paper Voucher Layout with Header Logo -->
+                </div>
+                <div class="modal-footer bg-light no-print">
+                    <button type="button" class="btn btn-secondary rounded-xl" data-bs-dismiss="modal">إغلاق</button>
+                    <button type="button" class="btn btn-primary rounded-xl fw-bold" onclick="window.print()">
+                        <i class="fa-solid fa-print me-2"></i>طباعة التفويض الرسمي (A4)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        const DB_KEY_EMPLOYEES = 'amran_fleet_employees';
+        const DB_KEY_VEHICLES = 'amran_fleet_vehicles';
+        const DB_KEY_ASSIGNMENTS = 'amran_fleet_assignments';
+        const DB_KEY_COMPANIES = 'amran_fleet_companies';
+        const DB_KEY_USERS = 'amran_fleet_users';
+
+        // DEFAULT SEED DATA WITH REGIONS & CITIES
+        const defaultCompanies = ['هنقرستيشن', 'كيتا', 'نينجا', 'ذاشيفز'];
+        const defaultUsers = [
+            { id: '1', username: 'محمد عمران', password: 'amran777', role: 'مسؤول النظام الرئيسي', status: 'نشط', createdAt: '2026-01-01', phone: '0500000000' }
+        ];
+
+        const defaultVehicles = [
+            { id: 'v1', plate: 'أ ب ج 1234', ownership: 'شركة يلو لتأجير السيارات', model: 'تويوتا يارس', year: '2024', color: 'أبيض', region: 'الرياض', status: 'مفوضة', isAuthorized: 'نعم', currentDriver: 'أحمد محمود العلي', startDate: '2026-01-10', endDate: '2026-12-31', notes: 'حالة ممتازة' },
+            { id: 'v2', plate: 'ر س ط 5678', ownership: 'تمويل مصرف الراجحي', model: 'هيونداي أكسنت', year: '2023', color: 'أبيض لؤلؤي', region: 'جدة', status: 'متاحة', isAuthorized: 'لا', currentDriver: '-', startDate: '', endDate: '', notes: 'جاهزة للتسليم' },
+            { id: 'v3', plate: 'ح د ق 9988', ownership: 'شركة ذيب لخدمات الأعمال', model: 'نيسان صني', year: '2024', color: 'فضي', region: 'الدمام', status: 'مفوضة', isAuthorized: 'نعم', currentDriver: 'خالد عبدالله عمر', startDate: '2026-02-01', endDate: '2026-11-30', notes: 'جديدة' },
+            { id: 'v4', plate: 'م ن هـ 4455', ownership: 'شركة يلو لتأجير السيارات', model: 'تويوتا كامري', year: '2025', color: 'أسود', region: 'الرياض', status: 'متاحة', isAuthorized: 'لا', currentDriver: '-', startDate: '', endDate: '', notes: 'سيارة جديدة' }
+        ];
+
+        const defaultEmployees = [
+            { id: 'e1', name: 'أحمد محمود العلي', nationalId: '1098765432', code: 'EMP-101', mobile: '0501234567', contractType: 'كفالة', appAccount: '', operatingApp: 'هنقرستيشن', region: 'الرياض', supervisor: 'سالم الكعبي', assignedVehiclePlate: 'أ ب ج 1234' },
+            { id: 'e2', name: 'مصطفى حسن السيد', nationalId: '2345678901', code: 'EMP-102', mobile: '0559876543', contractType: 'فري لانسر', appAccount: 'Mustafa_Ninja_Riyadh', operatingApp: 'نينجا', region: 'جدة', supervisor: 'محمد العمران', assignedVehiclePlate: '' },
+            { id: 'e3', name: 'خالد عبدالله عمر', nationalId: '1012345678', code: 'EMP-103', mobile: '0541122334', contractType: 'كفالة', appAccount: '', operatingApp: 'ذاشيفز', region: 'الدمام', supervisor: 'فهد العتيبي', assignedVehiclePlate: 'ح د ق 9988' }
+        ];
+
+        const defaultAssignments = [
+            { id: 'ASG-1001', empId: 'e1', empName: 'أحمد محمود العلي', nationalId: '1098765432', plate: 'أ ب ج 1234', vehicleModel: 'تويوتا يارس', region: 'الرياض', operatingApp: 'هنقرستيشن', ownership: 'شركة يلو لتأجير السيارات', startDate: '2026-01-10', endDate: '2026-12-31', notes: 'تم تسليم السيارة مع مفتاحين واستمارة' },
+            { id: 'ASG-1002', empId: 'e3', empName: 'خالد عبدالله عمر', nationalId: '1012345678', plate: 'ح د ق 9988', vehicleModel: 'نيسان صني', region: 'الدمام', operatingApp: 'ذاشيفز', ownership: 'شركة ذيب لخدمات الأعمال', startDate: '2026-02-01', endDate: '2026-11-30', notes: 'تسليم اول الفتره' }
+        ];
+
+        function getStorage(key, defaultVal) {
+            const data = localStorage.getItem(key);
+            if (!data) {
+                localStorage.setItem(key, JSON.stringify(defaultVal));
+                return defaultVal;
+            }
+            return JSON.parse(data);
+        }
+
+        function setStorage(key, val) {
+            localStorage.setItem(key, JSON.stringify(val));
+        }
+
+        let dbEmployees = getStorage(DB_KEY_EMPLOYEES, defaultEmployees);
+        let dbVehicles = getStorage(DB_KEY_VEHICLES, defaultVehicles);
+        let dbAssignments = getStorage(DB_KEY_ASSIGNMENTS, defaultAssignments);
+        let dbCompanies = getStorage(DB_KEY_COMPANIES, defaultCompanies);
+        let dbUsers = getStorage(DB_KEY_USERS, defaultUsers);
+        let currentUser = null;
+        let activeImportTarget = null; // 'employees', 'vehicles', or 'assignments'
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initLiveTime();
+            setupEventListeners();
+            populateDropdowns();
+            renderDashboard();
+            renderEmployeesTable();
+            renderVehiclesTable();
+            renderAssignmentsTable();
+            renderCompaniesCards();
+            renderUsersTable();
+            generateComprehensiveReport();
+            checkSystemNotifications();
+        });
+
+        function initLiveTime() {
+            setInterval(() => {
+                const now = new Date();
+                const badge = document.getElementById('live-time-badge');
+                if (badge) {
+                    badge.innerText = now.toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + ' - ' + now.toLocaleTimeString('ar-SA');
+                }
+            }, 1000);
+        }
+
+        function setupEventListeners() {
+            // Login Form
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const userVal = document.getElementById('login-username').value.trim();
+                const passVal = document.getElementById('login-password').value.trim();
+
+                const userExists = dbUsers.find(u => u.username === userVal);
+                
+                if (!userExists) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'اسم المستخدم غير موجود',
+                        text: 'اسم المستخدم الذي أدخلته غير مسجل بالنظام!',
+                        confirmButtonText: 'حسناً'
+                    });
+                    return;
+                }
+
+                if (userExists.password !== passVal) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'كلمة المرور خاطئة',
+                        text: 'عفواً، كلمة المرور التي أدخلتها خاطئة!',
+                        confirmButtonText: 'حاول مجدداً'
+                    });
+                    return;
+                }
+
+                if (userExists.status === 'مجمد') {
+                    Swal.fire('حساب مجمد', 'تم تجميد هذا الحساب من قبل مدير النظام.', 'error');
+                    return;
+                }
+
+                currentUser = userExists;
+                document.getElementById('current-user-name').innerText = currentUser.username;
+                document.getElementById('login-overlay').style.display = 'none';
+                Swal.fire({
+                    icon: 'success',
+                    title: 'أهلاً بك في نظام عمران',
+                    text: `تم تسجيل الدخول بنجاح باسم ${currentUser.username}`,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            });
+
+            // System Lock / Logout
+            document.getElementById('btn-lock-system').addEventListener('click', () => {
+                currentUser = null;
+                document.getElementById('login-overlay').style.display = 'flex';
+                document.getElementById('login-password').value = '';
+            });
+
+            // Navigation Links
+            document.querySelectorAll('.nav-link-custom').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    switchPage(page);
+                });
+            });
+
+            // Mobile Sidebar Toggle
+            document.getElementById('mobile-sidebar-toggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('show');
+            });
+
+            // Global Search Input
+            document.getElementById('global-search-input').addEventListener('input', (e) => {
+                const query = e.target.value.trim().toLowerCase();
+                if (query.length > 1) {
+                    performGlobalSearch(query);
+                }
+            });
+
+            // Backup & DB Import/Export JSON
+            document.getElementById('btn-export-json').addEventListener('click', exportDatabaseJSON);
+            document.getElementById('btn-import-json').addEventListener('click', () => document.getElementById('json-file-input').click());
+            document.getElementById('json-file-input').addEventListener('change', importDatabaseJSON);
+            document.getElementById('btn-export-excel').addEventListener('click', exportAllToExcel);
+
+            // Generic Excel File Input Change
+            document.getElementById('excel-generic-file-input').addEventListener('change', handleExcelImportFileSelected);
+
+            // Form Submissions
+            document.getElementById('form-employee').addEventListener('submit', handleEmployeeFormSubmit);
+            document.getElementById('form-vehicle').addEventListener('submit', handleVehicleFormSubmit);
+            document.getElementById('form-assignment').addEventListener('submit', handleAssignmentFormSubmit);
+            document.getElementById('form-user').addEventListener('submit', handleUserFormSubmit);
+            document.getElementById('form-company').addEventListener('submit', handleCompanyFormSubmit);
+
+            // Filters
+            document.getElementById('emp-filter-search').addEventListener('input', renderEmployeesTable);
+            document.getElementById('emp-filter-city').addEventListener('change', renderEmployeesTable);
+            document.getElementById('emp-filter-contract').addEventListener('change', renderEmployeesTable);
+            document.getElementById('emp-filter-app').addEventListener('change', renderEmployeesTable);
+
+            document.getElementById('veh-filter-search').addEventListener('input', renderVehiclesTable);
+            document.getElementById('veh-filter-city').addEventListener('change', renderVehiclesTable);
+            document.getElementById('veh-filter-owner').addEventListener('change', renderVehiclesTable);
+            document.getElementById('veh-filter-status').addEventListener('change', renderVehiclesTable);
+        }
+
+        function populateDropdowns() {
+            // 1. Operating Apps Dropdowns
+            const empAppSelect = document.getElementById('emp-operating-app');
+            const empFilterApp = document.getElementById('emp-filter-app');
+            const repFilterApp = document.getElementById('rep-filter-operating-app');
+
+            let companyOptions = '<option value="">-- اختر التطبيق المشغل --</option>';
+            let filterCompanyOptions = '<option value="">جميع التطبيقات المشغلة</option>';
+            let repCompanyOptions = '<option value="">📱 جميع الشركات المشغلة (التطبيقات)</option>';
+
+            dbCompanies.forEach(c => {
+                companyOptions += `<option value="${c}">${c}</option>`;
+                filterCompanyOptions += `<option value="${c}">${c}</option>`;
+                repCompanyOptions += `<option value="${c}">${c}</option>`;
+            });
+
+            if (empAppSelect) empAppSelect.innerHTML = companyOptions;
+            if (empFilterApp) empFilterApp.innerHTML = filterCompanyOptions;
+            if (repFilterApp) repFilterApp.innerHTML = repCompanyOptions;
+
+            // 2. Extract Cities/Regions Dropdowns
+            const citiesSet = new Set();
+            dbEmployees.forEach(e => { if (e.region) citiesSet.add(e.region.trim()); });
+            dbVehicles.forEach(v => { if (v.region) citiesSet.add(v.region.trim()); });
+            const sortedCities = Array.from(citiesSet).sort();
+
+            const empFilterCity = document.getElementById('emp-filter-city');
+            const vehFilterCity = document.getElementById('veh-filter-city');
+            const repFilterCity = document.getElementById('rep-filter-city');
+
+            let cityOptionsHtml = '<option value="">جميع المدن / المناطق</option>';
+            let repCityOptionsHtml = '<option value="">🏙️ جميع المدن والمناطق</option>';
+
+            sortedCities.forEach(city => {
+                cityOptionsHtml += `<option value="${city}">${city}</option>`;
+                repCityOptionsHtml += `<option value="${city}">${city}</option>`;
+            });
+
+            if (empFilterCity) empFilterCity.innerHTML = cityOptionsHtml;
+            if (vehFilterCity) vehFilterCity.innerHTML = cityOptionsHtml;
+            if (repFilterCity) repFilterCity.innerHTML = repCityOptionsHtml;
+
+            // 3. Extract Owning / Leasing Companies Dropdowns
+            const ownersSet = new Set();
+            dbVehicles.forEach(v => { if (v.ownership) ownersSet.add(v.ownership.trim()); });
+            const sortedOwners = Array.from(ownersSet).sort();
+
+            const vehFilterOwner = document.getElementById('veh-filter-owner');
+            const repFilterOwner = document.getElementById('rep-filter-owner-company');
+
+            let ownerOptionsHtml = '<option value="">جميع الشركات المالكة / المؤجرة</option>';
+            let repOwnerOptionsHtml = '<option value="">🏢 جميع الشركات المالكة / المؤجرة</option>';
+
+            sortedOwners.forEach(owner => {
+                ownerOptionsHtml += `<option value="${owner}">${owner}</option>`;
+                repOwnerOptionsHtml += `<option value="${owner}">${owner}</option>`;
+            });
+
+            if (vehFilterOwner) vehFilterOwner.innerHTML = ownerOptionsHtml;
+            if (repFilterOwner) repFilterOwner.innerHTML = repOwnerOptionsHtml;
+        }
+
+        function renderDashboard() {
+            document.getElementById('stat-total-emp').innerText = dbEmployees.length;
+            const kafalaCount = dbEmployees.filter(e => e.contractType === 'كفالة').length;
+            const freelanceCount = dbEmployees.filter(e => e.contractType === 'فري لانسر').length;
+            document.getElementById('stat-kafala-emp').innerText = kafalaCount;
+            document.getElementById('stat-freelance-emp').innerText = freelanceCount;
+
+            document.getElementById('stat-total-veh').innerText = dbVehicles.length;
+            const authCount = dbVehicles.filter(v => v.isAuthorized === 'نعم').length;
+            document.getElementById('stat-auth-veh').innerText = authCount;
+            document.getElementById('stat-unauth-veh').innerText = dbVehicles.length - authCount;
+
+            // Recent assignments table
+            const recentBody = document.getElementById('dash-recent-assignments');
+            const sortedAsg = [...dbAssignments].reverse().slice(0, 5);
+            if (sortedAsg.length === 0) {
+                recentBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">لا توجد تفاويض مسجلة مؤخراً</td></tr>`;
+            } else {
+                recentBody.innerHTML = sortedAsg.map(a => `
+                    <tr>
+                        <td class="fw-bold">${a.empName}</td>
+                        <td><span class="badge bg-dark">${a.plate}</span></td>
+                        <td>${a.startDate || '-'}</td>
+                        <td><span class="badge bg-success-subtle text-success fw-bold">تفويض ساري</span></td>
+                    </tr>
+                `).join('');
+            }
+
+            // Operating Apps Distribution
+            const appListContainer = document.getElementById('dash-apps-distribution');
+            const appCounts = {};
+            dbCompanies.forEach(c => appCounts[c] = 0);
+            dbEmployees.forEach(e => {
+                if (e.operatingApp) {
+                    appCounts[e.operatingApp] = (appCounts[e.operatingApp] || 0) + 1;
+                }
+            });
+
+            let appHtml = '';
+            for (const [app, count] of Object.entries(appCounts)) {
+                const percentage = dbEmployees.length ? Math.round((count / dbEmployees.length) * 100) : 0;
+                appHtml += `
+                    <div class="list-group-item bg-transparent border-0 px-0 py-2">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold small">${app}</span>
+                            <span class="badge bg-primary-subtle text-primary fw-bold">${count} مندوب (${percentage}%)</span>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-secondary" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            appListContainer.innerHTML = appHtml;
+        }
+
+        function renderEmployeesTable() {
+            const tbody = document.getElementById('employees-table-body');
+            const searchVal = document.getElementById('emp-filter-search').value.toLowerCase().trim();
+            const cityVal = document.getElementById('emp-filter-city').value.trim();
+            const contractVal = document.getElementById('emp-filter-contract').value;
+            const appVal = document.getElementById('emp-filter-app').value;
+
+            const filtered = dbEmployees.filter(e => {
+                const matchesSearch = !searchVal || 
+                    (e.name && e.name.toLowerCase().includes(searchVal)) || 
+                    (e.nationalId && e.nationalId.includes(searchVal)) || 
+                    (e.code && e.code.toLowerCase().includes(searchVal)) ||
+                    (e.mobile && e.mobile.includes(searchVal)) ||
+                    (e.region && e.region.toLowerCase().includes(searchVal));
+                
+                const matchesCity = !cityVal || (e.region && e.region.trim() === cityVal);
+                const matchesContract = !contractVal || e.contractType === contractVal;
+                const matchesApp = !appVal || e.operatingApp === appVal;
+
+                return matchesSearch && matchesCity && matchesContract && matchesApp;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="12" class="text-center text-muted py-4">لا توجد نتائج تطابق خيارات الفلترة أو السجل فارغ.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((e, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="fw-bold text-primary">${e.name}</td>
+                    <td><span class="badge bg-light text-dark border">${e.code}</span></td>
+                    <td>${e.nationalId}</td>
+                    <td><a href="tel:${e.mobile}" class="text-decoration-none">${e.mobile}</a></td>
+                    <td><span class="badge badge-city"><i class="fa-solid fa-location-dot me-1"></i>${e.region || 'الرياض'}</span></td>
+                    <td>
+                        <span class="badge ${e.contractType === 'كفالة' ? 'bg-primary-subtle text-primary' : 'bg-warning-subtle text-dark'} fw-bold">
+                            ${e.contractType}
+                        </span>
+                    </td>
+                    <td>${e.appAccount || '-'}</td>
+                    <td><span class="badge bg-info-subtle text-info fw-bold">${e.operatingApp || '-'}</span></td>
+                    <td>${e.assignedVehiclePlate ? `<span class="badge bg-dark">${e.assignedVehiclePlate}</span>` : '<span class="text-muted small">لا يوجد</span>'}</td>
+                    <td>${e.supervisor || '-'}</td>
+                    <td class="no-print">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" onclick="editEmployee('${e.id}')" title="تعديل"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn btn-outline-danger" onclick="deleteEmployee('${e.id}')" title="حذف"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderVehiclesTable() {
+            const tbody = document.getElementById('vehicles-table-body');
+            const searchVal = document.getElementById('veh-filter-search').value.toLowerCase().trim();
+            const cityVal = document.getElementById('veh-filter-city').value.trim();
+            const ownerVal = document.getElementById('veh-filter-owner').value.trim();
+            const statusVal = document.getElementById('veh-filter-status').value;
+
+            const filtered = dbVehicles.filter(v => {
+                const matchesSearch = !searchVal || 
+                    (v.plate && v.plate.toLowerCase().includes(searchVal)) || 
+                    (v.model && v.model.toLowerCase().includes(searchVal)) ||
+                    (v.ownership && v.ownership.toLowerCase().includes(searchVal)) ||
+                    (v.region && v.region.toLowerCase().includes(searchVal));
+
+                const matchesCity = !cityVal || (v.region && v.region.trim() === cityVal);
+                const matchesOwner = !ownerVal || (v.ownership && v.ownership.trim() === ownerVal);
+                const matchesStatus = !statusVal || v.status === statusVal;
+
+                return matchesSearch && matchesCity && matchesOwner && matchesStatus;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">لا توجد مركبات تطابق خيارات الفلترة المحددة.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(v => `
+                <tr>
+                    <td><span class="badge bg-dark fs-6 font-monospace">${v.plate}</span></td>
+                    <td class="fw-bold">${v.model}</td>
+                    <td>${v.year || '-'} / ${v.color || '-'}</td>
+                    <td class="fw-semibold text-secondary"><i class="fa-solid fa-building me-1"></i>${v.ownership}</td>
+                    <td><span class="badge badge-city"><i class="fa-solid fa-location-dot me-1"></i>${v.region || 'الرياض'}</span></td>
+                    <td>
+                        ${v.isAuthorized === 'نعم' ? 
+                            '<span class="badge bg-success-subtle text-success fw-bold"><i class="fa-solid fa-check me-1"></i>نعم</span>' : 
+                            '<span class="badge bg-secondary-subtle text-secondary">لا</span>'}
+                    </td>
+                    <td class="fw-bold">${v.currentDriver || '-'}</td>
+                    <td class="small text-muted">${v.startDate ? `${v.startDate} ➔ ${v.endDate || 'مفتوح'}` : '-'}</td>
+                    <td>
+                        <span class="badge ${v.status === 'مفوضة' ? 'bg-success' : (v.status === 'صيانة' ? 'bg-danger' : 'bg-info')} text-white fw-bold">
+                            ${v.status}
+                        </span>
+                    </td>
+                    <td class="no-print">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" onclick="editVehicle('${v.id}')" title="تعديل"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn btn-outline-danger" onclick="deleteVehicle('${v.id}')" title="حذف"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAssignmentsTable() {
+            const tbody = document.getElementById('assignments-table-body');
+            if (dbAssignments.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">لا توجد تفاويض مسجلة حالياً.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = dbAssignments.map(a => `
+                <tr>
+                    <td><span class="badge bg-secondary font-monospace">${a.id}</span></td>
+                    <td class="fw-bold text-primary">${a.empName}</td>
+                    <td><span class="badge badge-city">${a.region || 'الرياض'}</span></td>
+                    <td>${a.nationalId || '-'}</td>
+                    <td><span class="badge bg-dark fs-6">${a.plate}</span></td>
+                    <td>${a.vehicleModel || '-'}</td>
+                    <td>${a.startDate || '-'}</td>
+                    <td>${a.endDate || 'مفتوح'}</td>
+                    <td class="small text-muted">${a.notes || '-'}</td>
+                    <td class="no-print">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" onclick="printOfficialVoucher('${a.id}')" title="طباعة بوليضة التفويض الرسمي"><i class="fa-solid fa-print"></i></button>
+                            <button class="btn btn-outline-success" onclick="shareAssignmentWhatsApp('${a.id}')" title="مشاركة عبر واتساب"><i class="fa-brands fa-whatsapp"></i></button>
+                            <button class="btn btn-outline-danger" onclick="cancelAssignment('${a.id}')" title="إلغاء التفويض"><i class="fa-solid fa-ban"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function generateComprehensiveReport() {
+            const selectedCity = document.getElementById('rep-filter-city').value.trim();
+            const selectedOperatingApp = document.getElementById('rep-filter-operating-app').value.trim();
+            const selectedOwnerCompany = document.getElementById('rep-filter-owner-company').value.trim();
+
+            // Build consolidated dataset from employees, vehicles and assignments
+            let reportData = [];
+
+            // Combine vehicles with current assigned drivers or unassigned status
+            dbVehicles.forEach(v => {
+                const assignedEmp = dbEmployees.find(e => e.assignedVehiclePlate === v.plate || e.name === v.currentDriver);
+                
+                const empName = assignedEmp ? assignedEmp.name : (v.currentDriver !== '-' ? v.currentDriver : 'بدون سائق');
+                const empCity = (assignedEmp && assignedEmp.region) ? assignedEmp.region : (v.region || 'الرياض');
+                const empOperatingApp = (assignedEmp && assignedEmp.operatingApp) ? assignedEmp.operatingApp : '-';
+                const contractType = assignedEmp ? assignedEmp.contractType : '-';
+
+                reportData.push({
+                    plate: v.plate,
+                    vehicleModel: v.model,
+                    ownership: v.ownership,
+                    city: empCity,
+                    operatingApp: empOperatingApp,
+                    driverName: empName,
+                    contractType: contractType,
+                    status: v.status,
+                    isAuthorized: v.isAuthorized,
+                    startDate: v.startDate || '-',
+                    endDate: v.endDate || '-'
+                });
+            });
+
+            // Apply 3-way Filter
+            const filteredReport = reportData.filter(item => {
+                const matchCity = !selectedCity || item.city.trim() === selectedCity;
+                const matchOperating = !selectedOperatingApp || item.operatingApp.trim() === selectedOperatingApp;
+                const matchOwner = !selectedOwnerCompany || item.ownership.trim() === selectedOwnerCompany;
+                return matchCity && matchOperating && matchOwner;
+            });
+
+            // Render Metrics Summary
+            const metricsContainer = document.getElementById('report-summary-cards');
+            const totalFiltered = filteredReport.length;
+            const authorizedFiltered = filteredReport.filter(r => r.isAuthorized === 'نعم').length;
+            const availableFiltered = filteredReport.filter(r => r.status === 'متاحة').length;
+            const maintenanceFiltered = filteredReport.filter(r => r.status === 'صيانة').length;
+
+            metricsContainer.innerHTML = `
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-2xl border shadow-sm text-center">
+                        <small class="text-muted fw-bold d-block">إجمالي نتائح الفلترة</small>
+                        <h4 class="fw-extrabold text-primary mb-0 mt-1">${totalFiltered}</h4>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-2xl border shadow-sm text-center">
+                        <small class="text-muted fw-bold d-block">مركبات مفوضة بالفلتر</small>
+                        <h4 class="fw-extrabold text-success mb-0 mt-1">${authorizedFiltered}</h4>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-2xl border shadow-sm text-center">
+                        <small class="text-muted fw-bold d-block">مركبات متاحة بالفلتر</small>
+                        <h4 class="fw-extrabold text-info mb-0 mt-1">${availableFiltered}</h4>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-2xl border shadow-sm text-center">
+                        <small class="text-muted fw-bold d-block">مركبات بالصيانة بالفلتر</small>
+                        <h4 class="fw-extrabold text-danger mb-0 mt-1">${maintenanceFiltered}</h4>
+                    </div>
+                </div>
+            `;
+
+            // Render Printable Table & Report Content
+            const printableArea = document.getElementById('report-printable-area');
+            const activeCityText = selectedCity || 'جميع المدن والمناطق';
+            const activeOperatingText = selectedOperatingApp || 'جميع الشركات المشغلة';
+            const activeOwnerText = selectedOwnerCompany || 'جميع الشركات المالكة والمؤجرة';
+
+            let tableRowsHtml = '';
+            if (filteredReport.length === 0) {
+                tableRowsHtml = `<tr><td colspan="9" class="text-center text-muted py-4">لا توجد بيانات مطابقة لخيارات الفلترة المحددة.</td></tr>`;
+            } else {
+                tableRowsHtml = filteredReport.map((r, idx) => `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td class="fw-bold"><span class="badge bg-dark">${r.plate}</span></td>
+                        <td class="fw-semibold">${r.vehicleModel}</td>
+                        <td><span class="badge badge-city">${r.city}</span></td>
+                        <td class="fw-semibold text-secondary">${r.ownership}</td>
+                        <td><span class="badge bg-info-subtle text-info fw-bold">${r.operatingApp}</span></td>
+                        <td class="fw-bold text-primary">${r.driverName}</td>
+                        <td><span class="badge bg-light text-dark border">${r.contractType}</span></td>
+                        <td>
+                            <span class="badge ${r.status === 'مفوضة' ? 'bg-success' : (r.status === 'صيانة' ? 'bg-danger' : 'bg-info')} text-white">
+                                ${r.status}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            printableArea.innerHTML = `
+                <div class="printable-letterhead d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="fw-extrabold mb-1" style="color: #0f2a4a;">شركة وتد الحياة للخدمات اللوجستية</h4>
+                        <div class="text-muted small">إدارة حركة الأسطول والتشغيل - التقرير الشامل المفلتر</div>
+                    </div>
+                    <div class="text-center">
+                        <svg class="brand-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 50px; height:50px;">
+                            <circle cx="50" cy="50" r="48" fill="#0f2a4a" stroke="#f59e0b" stroke-width="3"/>
+                            <path d="M50 15 L78 30 L78 65 L50 85 L22 65 L22 30 Z" fill="none" stroke="#0d9488" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <div class="text-end small">
+                        <div><strong>تاريخ التقرير:</strong> ${new Date().toLocaleDateString('ar-SA')}</div>
+                        <div><strong>المستخدم:</strong> ${currentUser ? currentUser.username : 'مسؤول النظام'}</div>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-light rounded-xl mb-3 border small">
+                    <div class="row text-muted">
+                        <div class="col-md-4"><strong>المدينة / المنطقة:</strong> <span class="text-dark fw-bold">${activeCityText}</span></div>
+                        <div class="col-md-4"><strong>الشركة المشغلة:</strong> <span class="text-dark fw-bold">${activeOperatingText}</span></div>
+                        <div class="col-md-4"><strong>الشركة المالكة/المؤجرة:</strong> <span class="text-dark fw-bold">${activeOwnerText}</span></div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-custom align-middle text-center mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>رقم اللوحة</th>
+                                <th>نوع المركبة</th>
+                                <th>المدينة / المنطقة</th>
+                                <th>الشركة المالكة / المؤجرة</th>
+                                <th>الشركة المشغلة (التطبيق)</th>
+                                <th>المندوب / السائق</th>
+                                <th>نوع العقد</th>
+                                <th>حالة المركبة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRowsHtml}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-none d-print-block mt-4 pt-3 border-top text-center small text-muted">
+                    تم استخراج هذا التقرير آلياً عبر برنامج عمران لإدارة الأسطول - شركة وتد الحياة للخدمات اللوجستية
+                </div>
+            `;
+        }
+
+        function resetReportFilters() {
+            document.getElementById('rep-filter-city').value = '';
+            document.getElementById('rep-filter-operating-app').value = '';
+            document.getElementById('rep-filter-owner-company').value = '';
+            generateComprehensiveReport();
+        }
+
+        function exportFilteredReportToExcel() {
+            const selectedCity = document.getElementById('rep-filter-city').value.trim();
+            const selectedOperatingApp = document.getElementById('rep-filter-operating-app').value.trim();
+            const selectedOwnerCompany = document.getElementById('rep-filter-owner-company').value.trim();
+
+            let reportData = [];
+            dbVehicles.forEach(v => {
+                const assignedEmp = dbEmployees.find(e => e.assignedVehiclePlate === v.plate || e.name === v.currentDriver);
+                const empName = assignedEmp ? assignedEmp.name : (v.currentDriver !== '-' ? v.currentDriver : 'بدون سائق');
+                const empCity = (assignedEmp && assignedEmp.region) ? assignedEmp.region : (v.region || 'الرياض');
+                const empOperatingApp = (assignedEmp && assignedEmp.operatingApp) ? assignedEmp.operatingApp : '-';
+
+                reportData.push({
+                    'رقم اللوحة': v.plate,
+                    'نوع المركبة': v.model,
+                    'المدينة / المنطقة': empCity,
+                    'الشركة المالكة / المؤجرة': v.ownership,
+                    'الشركة المشغلة (التطبيق)': empOperatingApp,
+                    'المندوب / السائق': empName,
+                    'نوع العقد': assignedEmp ? assignedEmp.contractType : '-',
+                    'حالة المركبة': v.status,
+                    'مفوضة؟': v.isAuthorized
+                });
+            });
+
+            const filtered = reportData.filter(item => {
+                const matchCity = !selectedCity || item['المدينة / المنطقة'].trim() === selectedCity;
+                const matchOperating = !selectedOperatingApp || item['الشركة المشغلة (التطبيق)'].trim() === selectedOperatingApp;
+                const matchOwner = !selectedOwnerCompany || item['الشركة المالكة / المؤجرة'].trim() === selectedOwnerCompany;
+                return matchCity && matchOperating && matchOwner;
+            });
+
+            if (filtered.length === 0) {
+                Swal.fire('تنبيه', 'لا توجد بيانات مطابقة للتصدير', 'warning');
+                return;
+            }
+
+            const worksheet = XLSX.utils.json_to_sheet(filtered);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "التقرير المفلتر");
+            XLSX.writeFile(workbook, `التقرير_المفلتر_شركة_وتد_الحياة_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        function openEmployeeModal(id = null) {
+            document.getElementById('form-employee').reset();
+            document.getElementById('emp-id-hidden').value = '';
+            document.getElementById('emp-modal-title').innerText = 'إضافة مندوب جديد';
+
+            // Populate Available Vehicles Select
+            const vehSelect = document.getElementById('emp-vehicle-select');
+            let opts = '<option value="">بدون سيارة حالياً</option>';
+            dbVehicles.forEach(v => {
+                opts += `<option value="${v.plate}">${v.plate} - ${v.model} (${v.region})</option>`;
+            });
+            vehSelect.innerHTML = opts;
+
+            if (id) {
+                const emp = dbEmployees.find(e => e.id === id);
+                if (emp) {
+                    document.getElementById('emp-id-hidden').value = emp.id;
+                    document.getElementById('emp-modal-title').innerText = 'تعديل بيانات المندوب';
+                    document.getElementById('emp-name').value = emp.name;
+                    document.getElementById('emp-national-id').value = emp.nationalId;
+                    document.getElementById('emp-code').value = emp.code;
+                    document.getElementById('emp-mobile').value = emp.mobile;
+                    document.getElementById('emp-region').value = emp.region || '';
+                    document.getElementById('emp-contract-type').value = emp.contractType;
+                    document.getElementById('emp-app-account').value = emp.appAccount || '';
+                    document.getElementById('emp-operating-app').value = emp.operatingApp || '';
+                    document.getElementById('emp-supervisor').value = emp.supervisor || '';
+                    document.getElementById('emp-vehicle-select').value = emp.assignedVehiclePlate || '';
+                    toggleFreelancerFields();
+                }
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('modal-employee'));
+            modal.show();
+        }
+
+        function toggleFreelancerFields() {
+            const contractType = document.getElementById('emp-contract-type').value;
+            const appAccInput = document.getElementById('emp-app-account');
+            if (contractType === 'فري لانسر') {
+                appAccInput.disabled = false;
+            } else {
+                appAccInput.disabled = true;
+                appAccInput.value = '';
+            }
+        }
+
+        function handleEmployeeFormSubmit(e) {
+            e.preventDefault();
+            const hiddenId = document.getElementById('emp-id-hidden').value;
+            const empObj = {
+                id: hiddenId || 'e_' + Date.now(),
+                name: document.getElementById('emp-name').value.trim(),
+                nationalId: document.getElementById('emp-national-id').value.trim(),
+                code: document.getElementById('emp-code').value.trim(),
+                mobile: document.getElementById('emp-mobile').value.trim(),
+                region: document.getElementById('emp-region').value.trim(),
+                contractType: document.getElementById('emp-contract-type').value,
+                appAccount: document.getElementById('emp-app-account').value.trim(),
+                operatingApp: document.getElementById('emp-operating-app').value,
+                supervisor: document.getElementById('emp-supervisor').value.trim(),
+                assignedVehiclePlate: document.getElementById('emp-vehicle-select').value
+            };
+
+            if (hiddenId) {
+                const idx = dbEmployees.findIndex(emp => emp.id === hiddenId);
+                if (idx !== -1) dbEmployees[idx] = empObj;
+            } else {
+                dbEmployees.push(empObj);
+            }
+
+            setStorage(DB_KEY_EMPLOYEES, dbEmployees);
+            populateDropdowns();
+            renderEmployeesTable();
+            renderDashboard();
+            generateComprehensiveReport();
+
+            bootstrap.Modal.getInstance(document.getElementById('modal-employee')).hide();
+            Swal.fire('تم الحفظ', 'تم حفظ بيانات المندوب بنجاح!', 'success');
+        }
+
+        function editEmployee(id) {
+            openEmployeeModal(id);
+        }
+
+        function deleteEmployee(id) {
+            Swal.fire({
+                title: 'تأكيد الحذف',
+                text: 'هل أنت تأكد من رغبتك في حذف هذا المندوب من السجل؟',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء'
+            }).then(res => {
+                if (res.isConfirmed) {
+                    dbEmployees = dbEmployees.filter(e => e.id !== id);
+                    setStorage(DB_KEY_EMPLOYEES, dbEmployees);
+                    populateDropdowns();
+                    renderEmployeesTable();
+                    renderDashboard();
+                    generateComprehensiveReport();
+                    Swal.fire('تم الحذف', 'تم حذف المندوب بنجاح.', 'success');
+                }
+            });
+        }
+
+        function openVehicleModal(id = null) {
+            document.getElementById('form-vehicle').reset();
+            document.getElementById('veh-id-hidden').value = '';
+            document.getElementById('veh-modal-title').innerText = 'إضافة مركبة جديدة';
+
+            if (id) {
+                const v = dbVehicles.find(veh => veh.id === id);
+                if (v) {
+                    document.getElementById('veh-id-hidden').value = v.id;
+                    document.getElementById('veh-modal-title').innerText = 'تعديل بيانات المركبة';
+                    document.getElementById('veh-plate').value = v.plate;
+                    document.getElementById('veh-ownership').value = v.ownership;
+                    document.getElementById('veh-model').value = v.model;
+                    document.getElementById('veh-year').value = v.year || '';
+                    document.getElementById('veh-color').value = v.color || '';
+                    document.getElementById('veh-region').value = v.region || '';
+                    document.getElementById('veh-status').value = v.status;
+                    document.getElementById('veh-notes').value = v.notes || '';
+                }
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('modal-vehicle'));
+            modal.show();
+        }
+
+        function handleVehicleFormSubmit(e) {
+            e.preventDefault();
+            const hiddenId = document.getElementById('veh-id-hidden').value;
+            const vehObj = {
+                id: hiddenId || 'v_' + Date.now(),
+                plate: document.getElementById('veh-plate').value.trim(),
+                ownership: document.getElementById('veh-ownership').value.trim(),
+                model: document.getElementById('veh-model').value.trim(),
+                year: document.getElementById('veh-year').value,
+                color: document.getElementById('veh-color').value.trim(),
+                region: document.getElementById('veh-region').value.trim(),
+                status: document.getElementById('veh-status').value,
+                isAuthorized: hiddenId ? (dbVehicles.find(v => v.id === hiddenId)?.isAuthorized || 'لا') : 'لا',
+                currentDriver: hiddenId ? (dbVehicles.find(v => v.id === hiddenId)?.currentDriver || '-') : '-',
+                startDate: hiddenId ? (dbVehicles.find(v => v.id === hiddenId)?.startDate || '') : '',
+                endDate: hiddenId ? (dbVehicles.find(v => v.id === hiddenId)?.endDate || '') : '',
+                notes: document.getElementById('veh-notes').value.trim()
+            };
+
+            if (hiddenId) {
+                const idx = dbVehicles.findIndex(v => v.id === hiddenId);
+                if (idx !== -1) dbVehicles[idx] = vehObj;
+            } else {
+                dbVehicles.push(vehObj);
+            }
+
+            setStorage(DB_KEY_VEHICLES, dbVehicles);
+            populateDropdowns();
+            renderVehiclesTable();
+            renderDashboard();
+            generateComprehensiveReport();
+
+            bootstrap.Modal.getInstance(document.getElementById('modal-vehicle')).hide();
+            Swal.fire('تم الحفظ', 'تم حفظ بيانات المركبة بنجاح!', 'success');
+        }
+
+        function editVehicle(id) {
+            openVehicleModal(id);
+        }
+
+        function deleteVehicle(id) {
+            Swal.fire({
+                title: 'حذف المركبة',
+                text: 'هل أنت متأكد من حذف هذه المركبة من الأسطول؟',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء'
+            }).then(res => {
+                if (res.isConfirmed) {
+                    dbVehicles = dbVehicles.filter(v => v.id !== id);
+                    setStorage(DB_KEY_VEHICLES, dbVehicles);
+                    populateDropdowns();
+                    renderVehiclesTable();
+                    renderDashboard();
+                    generateComprehensiveReport();
+                    Swal.fire('تم الحذف', 'تمت إزالة السيارة من الأسطول.', 'success');
+                }
+            });
+        }
+
+        function openAssignmentModal() {
+            document.getElementById('form-assignment').reset();
+
+            const empSelect = document.getElementById('assign-emp-select');
+            let empOpts = '<option value="">-- اختر مندوب --</option>';
+            dbEmployees.forEach(e => {
+                empOpts += `<option value="${e.id}">${e.name} (${e.code} - ${e.region})</option>`;
+            });
+            empSelect.innerHTML = empOpts;
+
+            const vehSelect = document.getElementById('assign-veh-select');
+            let vehOpts = '<option value="">-- اختر مركبة --</option>';
+            dbVehicles.forEach(v => {
+                vehOpts += `<option value="${v.id}">${v.plate} - ${v.model} (${v.ownership})</option>`;
+            });
+            vehSelect.innerHTML = vehOpts;
+
+            document.getElementById('assign-emp-preview').innerText = 'لم يتم الاختيار';
+            document.getElementById('assign-veh-preview').innerText = 'لم يتم الاختيار';
+
+            const modal = new bootstrap.Modal(document.getElementById('modal-assignment'));
+            modal.show();
+        }
+
+        function onAssignEmpChange() {
+            const empId = document.getElementById('assign-emp-select').value;
+            const emp = dbEmployees.find(e => e.id === empId);
+            if (emp) {
+                document.getElementById('assign-emp-preview').innerText = `${emp.name} | الهوية: ${emp.nationalId} | المدينة: ${emp.region}`;
+            }
+        }
+
+        function onAssignVehChange() {
+            const vehId = document.getElementById('assign-veh-select').value;
+            const veh = dbVehicles.find(v => v.id === vehId);
+            if (veh) {
+                document.getElementById('assign-veh-preview').innerText = `${veh.plate} (${veh.model}) | الملكية: ${veh.ownership}`;
+            }
+        }
+
+        function handleAssignmentFormSubmit(e) {
+            e.preventDefault();
+            const empId = document.getElementById('assign-emp-select').value;
+            const vehId = document.getElementById('assign-veh-select').value;
+
+            const emp = dbEmployees.find(e => e.id === empId);
+            const veh = dbVehicles.find(v => v.id === vehId);
+
+            if (!emp || !veh) return;
+
+            const asgCode = 'ASG-' + Math.floor(1000 + Math.random() * 9000);
+            const startDate = document.getElementById('assign-start-date').value || new Date().toISOString().split('T')[0];
+            const endDate = document.getElementById('assign-end-date').value || '';
+            const notes = document.getElementById('assign-notes').value.trim();
+
+            const newAsg = {
+                id: asgCode,
+                empId: emp.id,
+                empName: emp.name,
+                nationalId: emp.nationalId,
+                plate: veh.plate,
+                vehicleModel: veh.model,
+                region: emp.region,
+                operatingApp: emp.operatingApp,
+                ownership: veh.ownership,
+                startDate: startDate,
+                endDate: endDate,
+                notes: notes
+            };
+
+            // Update Vehicle Authorization status
+            veh.isAuthorized = 'نعم';
+            veh.status = 'مفوضة';
+            veh.currentDriver = emp.name;
+            veh.startDate = startDate;
+            veh.endDate = endDate;
+
+            // Update Employee Assigned Vehicle
+            emp.assignedVehiclePlate = veh.plate;
+
+            dbAssignments.push(newAsg);
+
+            setStorage(DB_KEY_ASSIGNMENTS, dbAssignments);
+            setStorage(DB_KEY_VEHICLES, dbVehicles);
+            setStorage(DB_KEY_EMPLOYEES, dbEmployees);
+
+            renderAssignmentsTable();
+            renderVehiclesTable();
+            renderEmployeesTable();
+            renderDashboard();
+            generateComprehensiveReport();
+
+            bootstrap.Modal.getInstance(document.getElementById('modal-assignment')).hide();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'تم إصدار التفويض',
+                text: `تم تفويض السيارة (${veh.plate}) للمندوب (${emp.name}) بنجاح!`,
+                showCancelButton: true,
+                confirmButtonText: 'طباعة التفويض الآن',
+                cancelButtonText: 'إغلاق'
+            }).then(res => {
+                if (res.isConfirmed) {
+                    printOfficialVoucher(asgCode);
+                }
+            });
+        }
+
+        function printOfficialVoucher(asgId) {
+            const asg = dbAssignments.find(a => a.id === asgId);
+            if (!asg) return;
+
+            const voucherArea = document.getElementById('voucher-printable-area');
+            voucherArea.innerHTML = `
+                <div class="printable-letterhead d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="fw-extrabold mb-1" style="color: #0f2a4a;">شركة وتد الحياة للخدمات اللوجستية</h3>
+                        <div class="text-muted fw-bold">إشعار وتفويض استلام مركبة رسمية</div>
+                    </div>
+                    <div>
+                        <svg class="brand-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 70px; height: 70px;">
+                            <circle cx="50" cy="50" r="48" fill="#0f2a4a" stroke="#f59e0b" stroke-width="3"/>
+                            <path d="M50 15 L78 30 L78 65 L50 85 L22 65 L22 30 Z" fill="none" stroke="#0d9488" stroke-width="3"/>
+                            <path d="M35 45 L50 32 L65 45 L65 65 L35 65 Z" fill="#f59e0b"/>
+                        </svg>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold">رقم التفويض: <span class="text-danger font-monospace">${asg.id}</span></div>
+                        <div class="text-muted small">تاريخ التحرير: ${asg.startDate}</div>
+                    </div>
+                </div>
+
+                <div class="card p-3 mb-3 border bg-light">
+                    <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-user me-2"></i>أولاً: بيانات المندوب المفوض</h6>
+                    <div class="row g-2">
+                        <div class="col-6"><strong>اسم المندوب:</strong> ${asg.empName}</div>
+                        <div class="col-6"><strong>رقم الهوية / الإقامة:</strong> ${asg.nationalId}</div>
+                        <div class="col-6"><strong>المدينة / المنطقة:</strong> ${asg.region || 'الرياض'}</div>
+                        <div class="col-6"><strong>الشركة المشغلة:</strong> ${asg.operatingApp || '-'}</div>
+                    </div>
+                </div>
+
+                <div class="card p-3 mb-3 border bg-light">
+                    <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-car me-2"></i>ثانياً: بيانات المركبة المسلمة</h6>
+                    <div class="row g-2">
+                        <div class="col-6"><strong>رقم اللوحة:</strong> <span class="badge bg-dark fs-6">${asg.plate}</span></div>
+                        <div class="col-6"><strong>نوع المركبة والموديل:</strong> ${asg.vehicleModel}</div>
+                        <div class="col-6"><strong>الشركة المالكة/المؤجرة:</strong> ${asg.ownership || '-'}</div>
+                        <div class="col-6"><strong>مدّة التفويض:</strong> من ${asg.startDate} إلى ${asg.endDate || 'مفتوح'}</div>
+                    </div>
+                </div>
+
+                <div class="mb-4 small text-muted">
+                    <strong>تعهد واستلام:</strong> أقر أنا المندوب المذكور أعلاه باستلام المركبة الموضحة بياناتها بحالة سليمة، وأتعهد بالالتزام بأنظمة المرور بالمملكة والشركة والمحافظة عليها.
+                </div>
+
+                <div class="row text-center mt-5 pt-4 border-top">
+                    <div class="col-6">
+                        <h6 class="fw-bold">توقيع المندوب المفوض</h6>
+                        <br>....................................................
+                    </div>
+                    <div class="col-6">
+                        <h6 class="fw-bold">اعتماد مدير الأسطول</h6>
+                        <br>....................................................
+                    </div>
+                </div>
+            `;
+
+            const modal = new bootstrap.Modal(document.getElementById('modal-print-voucher'));
+            modal.show();
+        }
+
+        function cancelAssignment(asgId) {
+            Swal.fire({
+                title: 'إلغاء التفويض',
+                text: 'هل أنت متأكد من إلغاء هذا التفويض واسترجاع السيارة للمخزون المتاح؟',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، إلغاء التفويض',
+                cancelButtonText: 'تراجع'
+            }).then(res => {
+                if (res.isConfirmed) {
+                    const asg = dbAssignments.find(a => a.id === asgId);
+                    if (asg) {
+                        const veh = dbVehicles.find(v => v.plate === asg.plate);
+                        if (veh) {
+                            veh.isAuthorized = 'لا';
+                            veh.status = 'متاحة';
+                            veh.currentDriver = '-';
+                            veh.startDate = '';
+                            veh.endDate = '';
+                        }
+                        const emp = dbEmployees.find(e => e.id === asg.empId || e.name === asg.empName);
+                        if (emp) {
+                            emp.assignedVehiclePlate = '';
+                        }
+                    }
+
+                    dbAssignments = dbAssignments.filter(a => a.id !== asgId);
+
+                    setStorage(DB_KEY_ASSIGNMENTS, dbAssignments);
+                    setStorage(DB_KEY_VEHICLES, dbVehicles);
+                    setStorage(DB_KEY_EMPLOYEES, dbEmployees);
+
+                    renderAssignmentsTable();
+                    renderVehiclesTable();
+                    renderEmployeesTable();
+                    renderDashboard();
+                    generateComprehensiveReport();
+
+                    Swal.fire('تم الإلغاء', 'تم إلغاء التفويض وإعادة السيارة لحالة "متاحة".', 'success');
+                }
+            });
+        }
+
+        function openCompanyModal() {
+            document.getElementById('form-company').reset();
+            const modal = new bootstrap.Modal(document.getElementById('modal-company'));
+            modal.show();
+        }
+
+        function handleCompanyFormSubmit(e) {
+            e.preventDefault();
+            const compName = document.getElementById('company-name').value.trim();
+            if (compName && !dbCompanies.includes(compName)) {
+                dbCompanies.push(compName);
+                setStorage(DB_KEY_COMPANIES, dbCompanies);
+                populateDropdowns();
+                renderCompaniesCards();
+                renderDashboard();
+                generateComprehensiveReport();
+                bootstrap.Modal.getInstance(document.getElementById('modal-company')).hide();
+                Swal.fire('تم الإضافة', 'تم إضافة الشركة المشغلة بنجاح.', 'success');
+            }
+        }
+
+        function renderCompaniesCards() {
+            const container = document.getElementById('companies-cards-container');
+            if (dbCompanies.length === 0) {
+                container.innerHTML = `<div class="col-12 text-center text-muted">لا توجد شركات مشغلة مضافة.</div>`;
+                return;
+            }
+
+            container.innerHTML = dbCompanies.map(c => {
+                const count = dbEmployees.filter(e => e.operatingApp === c).length;
+                return `
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card border-0 shadow-soft rounded-2xl p-4 text-center">
+                            <div class="stat-icon bg-secondary-subtle text-secondary mx-auto mb-3" style="width:64px; height:64px; border-radius:18px;">
+                                <i class="fa-solid fa-building fs-3"></i>
+                            </div>
+                            <h5 class="fw-bold mb-1">${c}</h5>
+                            <span class="badge bg-primary-subtle text-primary fw-bold mb-3">${count} مندوب مسجل</span>
+                            <div>
+                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="deleteCompany('${c}')">
+                                    <i class="fa-solid fa-trash me-1"></i> حذف
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteCompany(cName) {
+            Swal.fire({
+                title: 'حذف الشركة المشغلة',
+                text: `هل تريد حذف (${cName}) من القائمة؟`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'نعم، احذف',
+                cancelButtonText: 'إلغاء'
+            }).then(res => {
+                if (res.isConfirmed) {
+                    dbCompanies = dbCompanies.filter(c => c !== cName);
+                    setStorage(DB_KEY_COMPANIES, dbCompanies);
+                    populateDropdowns();
+                    renderCompaniesCards();
+                    renderDashboard();
+                    generateComprehensiveReport();
+                    Swal.fire('تم الحذف', 'تم حذف الشركة المشغلة.', 'success');
+                }
+            });
+        }
+
+        function openUserModal() {
+            document.getElementById('form-user').reset();
+            const modal = new bootstrap.Modal(document.getElementById('modal-user'));
+            modal.show();
+        }
+
+        function handleUserFormSubmit(e) {
+            e.preventDefault();
+            const uname = document.getElementById('user-username').value.trim();
+            const pass = document.getElementById('user-password').value.trim();
+            const role = document.getElementById('user-role').value;
+
+            if (dbUsers.some(u => u.username === uname)) {
+                Swal.fire('تنبيه', 'اسم المستخدم هذا مستخدم مسبقاً!', 'warning');
+                return;
+            }
+
+            const newUser = {
+                id: 'u_' + Date.now(),
+                username: uname,
+                password: pass,
+                role: role,
+                status: 'نشط',
+                createdAt: new Date().toISOString().split('T')[0]
+            };
+
+            dbUsers.push(newUser);
+            setStorage(DB_KEY_USERS, dbUsers);
+            renderUsersTable();
+            bootstrap.Modal.getInstance(document.getElementById('modal-user')).hide();
+            Swal.fire('تم بنجاح', 'تم إنشاء حساب المستخدم بنجاح.', 'success');
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = dbUsers.map(u => `
+                <tr>
+                    <td class="fw-bold">${u.username}</td>
+                    <td><span class="badge bg-light text-dark border">${u.role}</span></td>
+                    <td>
+                        <span class="badge ${u.status === 'نشط' ? 'bg-success' : 'bg-danger'}">
+                            ${u.status}
+                        </span>
+                    </td>
+                    <td>${u.createdAt}</td>
+                    <td class="no-print">
+                        <button class="btn btn-sm ${u.status === 'نشط' ? 'btn-outline-danger' : 'btn-outline-success'} rounded-pill" onclick="toggleUserStatus('${u.id}')">
+                            ${u.status === 'نشط' ? 'تجميد' : 'تنشيط'}
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function toggleUserStatus(uId) {
+            const user = dbUsers.find(u => u.id === uId);
+            if (user) {
+                user.status = user.status === 'نشط' ? 'مجمد' : 'نشط';
+                setStorage(DB_KEY_USERS, dbUsers);
+                renderUsersTable();
+            }
+        }
+
+        function performGlobalSearch(query) {
+            document.getElementById('emp-filter-search').value = query;
+            document.getElementById('veh-filter-search').value = query;
+            renderEmployeesTable();
+            renderVehiclesTable();
+        }
+
+        function exportDatabaseJSON() {
+            const backup = {
+                employees: dbEmployees,
+                vehicles: dbVehicles,
+                assignments: dbAssignments,
+                companies: dbCompanies,
+                users: dbUsers,
+                exportDate: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `قاعدة_بيانات_عمران_اللوجستية_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function importDatabaseJSON(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const data = JSON.parse(evt.target.result);
+                    if (data.employees && data.vehicles) {
+                        dbEmployees = data.employees;
+                        dbVehicles = data.vehicles;
+                        dbAssignments = data.assignments || [];
+                        dbCompanies = data.companies || defaultCompanies;
+                        dbUsers = data.users || defaultUsers;
+
+                        setStorage(DB_KEY_EMPLOYEES, dbEmployees);
+                        setStorage(DB_KEY_VEHICLES, dbVehicles);
+                        setStorage(DB_KEY_ASSIGNMENTS, dbAssignments);
+                        setStorage(DB_KEY_COMPANIES, dbCompanies);
+                        setStorage(DB_KEY_USERS, dbUsers);
+
+                        populateDropdowns();
+                        renderDashboard();
+                        renderEmployeesTable();
+                        renderVehiclesTable();
+                        renderAssignmentsTable();
+                        renderCompaniesCards();
+                        renderUsersTable();
+                        generateComprehensiveReport();
+
+                        Swal.fire('تم الاستيراد', 'تم استعادة كافة بيانات النظام بنجاح!', 'success');
+                    }
+                } catch(err) {
+                    Swal.fire('خطأ', 'ملف JSON غير صالح!', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportEmployeesToExcel() {
+            if (dbEmployees.length === 0) {
+                Swal.fire('تنبيه', 'لا توجد بيانات موظفين للتصدير', 'warning');
+                return;
+            }
+            const data = dbEmployees.map((e, idx) => ({
+                'م': idx + 1,
+                'اسم المندوب': e.name,
+                'الرقم الوظيفي': e.code,
+                'رقم الهوية': e.nationalId,
+                'رقم الجوال': e.mobile,
+                'المدينة / المنطقة': e.region || '-',
+                'نوع العقد': e.contractType,
+                'حساب التطبيق': e.appAccount || '-',
+                'الشركة المشغلة': e.operatingApp || '-',
+                'المشرف': e.supervisor || '-',
+                'السيارة المسندة': e.assignedVehiclePlate || '-'
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "سجل المناديب");
+            XLSX.writeFile(workbook, `سجل_المناديب_شركة_وتد_الحياة_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        function exportVehiclesToExcel() {
+            if (dbVehicles.length === 0) {
+                Swal.fire('تنبيه', 'لا توجد بيانات مركبات للتصدير', 'warning');
+                return;
+            }
+            const data = dbVehicles.map(v => ({
+                'رقم اللوحة': v.plate,
+                'الموديل': v.model,
+                'سنة الصنع': v.year || '-',
+                'اللون': v.color || '-',
+                'الشركة المالكة / المؤجرة': v.ownership,
+                'المدينة / المنطقة': v.region || '-',
+                'مفوضة؟': v.isAuthorized,
+                'السائق المفوض': v.currentDriver || '-',
+                'تاريخ بداية التفويض': v.startDate || '-',
+                'تاريخ نهاية التفويض': v.endDate || '-',
+                'حالة المركبة': v.status,
+                'ملاحظات': v.notes || '-'
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "سجل المركبات");
+            XLSX.writeFile(workbook, `سجل_المركبات_شركة_وتد_الحياة_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        function exportAssignmentsToExcel() {
+            if (dbAssignments.length === 0) {
+                Swal.fire('تنبيه', 'لا توجد بيانات تفاويض للتصدير', 'warning');
+                return;
+            }
+            const data = dbAssignments.map(a => ({
+                'كود التفويض': a.id,
+                'اسم المندوب': a.empName,
+                'المدينة / المنطقة': a.region || '-',
+                'رقم الهوية': a.nationalId,
+                'رقم اللوحة': a.plate,
+                'نوع المركبة': a.vehicleModel || '-',
+                'تاريخ البداية': a.startDate || '-',
+                'تاريخ النهاية': a.endDate || 'مفتوح',
+                'ملاحظات التفويض': a.notes || '-'
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "سجل التفاويض");
+            XLSX.writeFile(workbook, `سجل_التفاويض_شركة_وتد_الحياة_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        function exportAllToExcel() {
+            exportFilteredReportToExcel();
+        }
+
+        function downloadSampleTemplate(target) {
+            const workbook = XLSX.utils.book_new();
+            let sampleData = [];
+            let fileName = '';
+
+            if (target === 'employees') {
+                sampleData = [{
+                    'اسم المندوب': 'عبدالرحمن العتيبي',
+                    'الرقم الوظيفي': 'EMP-201',
+                    'رقم الهوية': '1088776655',
+                    'رقم الجوال': '0501112233',
+                    'المدينة / المنطقة': 'الرياض',
+                    'نوع العقد': 'كفالة',
+                    'حساب التطبيق': '',
+                    'الشركة المشغلة': 'كيتا',
+                    'المشرف': 'محمد عمران',
+                    'السيارة المسندة': ''
+                }];
+                fileName = 'قالب_استيراد_المناديب.xlsx';
+            } else if (target === 'vehicles') {
+                sampleData = [{
+                    'رقم اللوحة': 'ن م ك 4433',
+                    'الموديل': 'تويوتا كامري',
+                    'سنة الصنع': '2024',
+                    'اللون': 'أبيض',
+                    'الشركة المالكة / المؤجرة': 'شركة يلو',
+                    'المدينة / المنطقة': 'جدة',
+                    'حالة المركبة': 'متاحة',
+                    'ملاحظات': 'سيارة جديدة'
+                }];
+                fileName = 'قالب_استيراد_المركبات.xlsx';
+            } else if (target === 'assignments') {
+                sampleData = [{
+                    'كود التفويض': 'ASG-2001',
+                    'اسم المندوب': 'عبدالرحمن العتيبي',
+                    'المدينة / المنطقة': 'الرياض',
+                    'رقم الهوية': '1088776655',
+                    'رقم اللوحة': 'ن م ك 4433',
+                    'نوع المركبة': 'تويوتا كامري',
+                    'تاريخ البداية': '2026-03-01',
+                    'تاريخ النهاية': '2026-12-31',
+                    'ملاحظات': 'استلام كود'
+                }];
+                fileName = 'قالب_استيراد_التفاويض.xlsx';
+            }
+
+            const ws = XLSX.utils.json_to_sheet(sampleData);
+            XLSX.utils.book_append_sheet(workbook, ws, "قالب نموذجي");
+            XLSX.writeFile(workbook, fileName);
+        }
+
+        function triggerImportExcel(target) {
+            activeImportTarget = target;
+            const fileInput = document.getElementById('excel-generic-file-input');
+            fileInput.value = '';
+            fileInput.click();
+        }
+
+        function handleExcelImportFileSelected(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const data = new Uint8Array(evt.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+                    if (!jsonRows || jsonRows.length === 0) {
+                        Swal.fire('ملف فارغ', 'الملف المحدد لا يحتوي على أسطر بيانات!', 'warning');
+                        return;
+                    }
+
+                    if (activeImportTarget === 'employees') {
+                        processEmployeesImport(jsonRows);
+                    } else if (activeImportTarget === 'vehicles') {
+                        processVehiclesImport(jsonRows);
+                    } else if (activeImportTarget === 'assignments') {
+                        processAssignmentsImport(jsonRows);
+                    }
+                } catch (err) {
+                    Swal.fire('خطأ قراءة الملف', 'حدث خطأ أثناء قراءة ملف الإكسل. يرجى التأكد من التنسيق.', 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function processEmployeesImport(rows) {
+            let importedCount = 0;
+            let updatedCount = 0;
+
+            rows.forEach(row => {
+                const name = (row['اسم المندوب'] || row['اسم الموظف'] || row['الاسم'] || row['name'] || '').toString().trim();
+                const nationalId = (row['رقم الهوية'] || row['الهوية'] || row['nationalId'] || '').toString().trim();
+                const code = (row['الرقم الوظيفي'] || row['الأيدي'] || row['الكود'] || row['code'] || '').toString().trim();
+
+                if (!name || (!nationalId && !code)) return;
+
+                const mobile = (row['رقم الجوال'] || row['الجوال'] || row['mobile'] || '').toString().trim();
+                const contractType = (row['نوع العقد'] || row['العقد'] || '').toString().includes('فري') ? 'فري لانسر' : 'كفالة';
+                const appAccount = (row['حساب التطبيق'] || '').toString().trim();
+                const operatingApp = (row['الشركة المشغلة'] || row['التطبيق المشغل'] || row['التطبيق'] || '').toString().trim() || dbCompanies[0] || 'هنقرستيشن';
+                const region = (row['المدينة / المنطقة'] || row['المدينة'] || row['المنطقة'] || '').toString().trim() || 'الرياض';
+                const supervisor = (row['المشرف'] || '').toString().trim();
+                const assignedVehiclePlate = (row['السيارة المسندة'] || row['رقم اللوحة'] || '').toString().trim();
+
+                const existingIdx = dbEmployees.findIndex(e => (nationalId && e.nationalId === nationalId) || (code && e.code.toLowerCase() === code.toLowerCase()));
+
+                const empData = {
+                    id: existingIdx !== -1 ? dbEmployees[existingIdx].id : 'e_' + Date.now() + Math.floor(Math.random()*100),
+                    name: name,
+                    nationalId: nationalId || ('10' + Math.floor(10000000 + Math.random() * 90000000)),
+                    code: code || ('EMP-' + Math.floor(100 + Math.random() * 900)),
+                    mobile: mobile || '0500000000',
+                    contractType: contractType,
+                    appAccount: appAccount,
+                    operatingApp: operatingApp,
+                    region: region,
+                    supervisor: supervisor,
+                    assignedVehiclePlate: assignedVehiclePlate
+                };
+
+                if (existingIdx !== -1) {
+                    dbEmployees[existingIdx] = empData;
+                    updatedCount++;
+                } else {
+                    dbEmployees.push(empData);
+                    importedCount++;
+                }
+            });
+
+            setStorage(DB_KEY_EMPLOYEES, dbEmployees);
+            populateDropdowns();
+            renderEmployeesTable();
+            renderDashboard();
+            generateComprehensiveReport();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'اكتمل استيراد المناديب',
+                text: `تم إضافة ${importedCount} مندوب جديد، وتحديث ${updatedCount} سوابق بنجاح!`
+            });
+        }
+
+        function processVehiclesImport(rows) {
+            let importedCount = 0;
+            let updatedCount = 0;
+
+            rows.forEach(row => {
+                const plate = (row['رقم اللوحة'] || row['اللوحة'] || row['plate'] || '').toString().trim();
+                if (!plate) return;
+
+                const model = (row['الموديل'] || row['نوع السيارة'] || row['model'] || 'سيارة أسطول').toString().trim();
+                const ownership = (row['الشركة المالكة / المؤجرة'] || row['الملكية'] || row['ownership'] || 'شركة وتد الحياة').toString().trim();
+                const year = (row['سنة الصنع'] || row['السنة'] || '').toString().trim();
+                const color = (row['اللون'] || '').toString().trim();
+                const region = (row['المدينة / المنطقة'] || row['المدينة'] || row['المنطقة'] || '').toString().trim() || 'الرياض';
+                const status = (row['حالة المركبة'] || row['الحالة'] || 'متاحة').toString().trim();
+                const notes = (row['ملاحظات'] || '').toString().trim();
+
+                const existingIdx = dbVehicles.findIndex(v => v.plate.toLowerCase() === plate.toLowerCase());
+
+                const vehData = {
+                    id: existingIdx !== -1 ? dbVehicles[existingIdx].id : 'v_' + Date.now() + Math.floor(Math.random()*100),
+                    plate: plate,
+                    model: model,
+                    ownership: ownership,
+                    year: year,
+                    color: color,
+                    region: region,
+                    status: status,
+                    isAuthorized: existingIdx !== -1 ? dbVehicles[existingIdx].isAuthorized : 'لا',
+                    currentDriver: existingIdx !== -1 ? dbVehicles[existingIdx].currentDriver : '-',
+                    startDate: existingIdx !== -1 ? dbVehicles[existingIdx].startDate : '',
+                    endDate: existingIdx !== -1 ? dbVehicles[existingIdx].endDate : '',
+                    notes: notes
+                };
+
+                if (existingIdx !== -1) {
+                    dbVehicles[existingIdx] = vehData;
+                    updatedCount++;
+                } else {
+                    dbVehicles.push(vehData);
+                    importedCount++;
+                }
+            });
+
+            setStorage(DB_KEY_VEHICLES, dbVehicles);
+            populateDropdowns();
+            renderVehiclesTable();
+            renderDashboard();
+            generateComprehensiveReport();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'اكتمل استيراد المركبات',
+                text: `تم إضافة ${importedCount} مركبة جديدة، وتحديث ${updatedCount} مركبة قائمة بنجاح!`
+            });
+        }
+
+        function processAssignmentsImport(rows) {
+            let importedCount = 0;
+
+            rows.forEach(row => {
+                const empName = (row['اسم المندوب'] || row['المندوب'] || row['اسم الموظف'] || '').toString().trim();
+                const plate = (row['رقم اللوحة'] || row['اللوحة'] || '').toString().trim();
+
+                if (!empName || !plate) return;
+
+                const nationalId = (row['رقم الهوية'] || row['الهوية'] || '').toString().trim();
+                const codeId = (row['كود التفويض'] || row['رقم التفويض'] || '').toString().trim() || ('ASG-' + Math.floor(1000 + Math.random() * 9000));
+                const vehicleModel = (row['نوع المركبة'] || row['الموديل'] || '').toString().trim();
+                const region = (row['المدينة / المنطقة'] || row['المدينة'] || '').toString().trim() || 'الرياض';
+                const startDate = (row['تاريخ البداية'] || row['تاريخ التفويض'] || '').toString().trim() || new Date().toISOString().split('T')[0];
+                const endDate = (row['تاريخ النهاية'] || '').toString().trim();
+                const notes = (row['ملاحظات'] || row['ملاحظات التفويض'] || '').toString().trim();
+
+                const asgObj = {
+                    id: codeId,
+                    empId: 'imp_' + Date.now(),
+                    empName: empName,
+                    nationalId: nationalId,
+                    plate: plate,
+                    vehicleModel: vehicleModel,
+                    region: region,
+                    startDate: startDate,
+                    endDate: endDate,
+                    notes: notes
+                };
+
+                const veh = dbVehicles.find(v => v.plate.toLowerCase() === plate.toLowerCase());
+                if (veh) {
+                    veh.isAuthorized = 'نعم';
+                    veh.status = 'مفوضة';
+                    veh.currentDriver = empName;
+                    veh.startDate = startDate;
+                    veh.endDate = endDate;
+                }
+
+                const emp = dbEmployees.find(e => e.name.toLowerCase() === empName.toLowerCase() || (nationalId && e.nationalId === nationalId));
+                if (emp) {
+                    emp.assignedVehiclePlate = plate;
+                }
+
+                dbAssignments.push(asgObj);
+                importedCount++;
+            });
+
+            setStorage(DB_KEY_ASSIGNMENTS, dbAssignments);
+            setStorage(DB_KEY_VEHICLES, dbVehicles);
+            setStorage(DB_KEY_EMPLOYEES, dbEmployees);
+
+            renderAssignmentsTable();
+            renderVehiclesTable();
+            renderEmployeesTable();
+            renderDashboard();
+            generateComprehensiveReport();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'اكتمل استيراد التفاويض',
+                text: `تم استيراد وإصدار ${importedCount} تفويض بنجاح وربطها بالأسطول!`
+            });
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'إعادة تعيين كلمة المرور',
+                text: 'أدخل اسم المستخدم لإرسال رمز التحقق (OTP) عبر رسالة نصية:',
+                input: 'text',
+                inputPlaceholder: 'اسم المستخدم',
+                showCancelButton: true,
+                confirmButtonText: 'إرسال رمز التحقق SMS',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const uname = result.value.trim();
+                    const targetUser = dbUsers.find(u => u.username === uname);
+
+                    if (!targetUser) {
+                        Swal.fire('خطأ', 'اسم المستخدم هذا غير موجود بالنظام!', 'error');
+                        return;
+                    }
+
+                    const otpCode = Math.floor(1000 + Math.random() * 9000);
+
+                    Swal.fire({
+                        icon: 'info',
+                        title: '📩 تم إرسال رسالة SMS',
+                        html: `تم إرسال رمز التحقق الخاص بإعادة التعيين.<br><br><div class="p-3 bg-light rounded text-center border"><strong>رمز التحقق الوارد: <span class="fs-4 text-danger">${otpCode}</span></strong></div>`,
+                        confirmButtonText: 'إدخال الرمز وإعادة التعيين'
+                    }).then(() => {
+                        Swal.fire({
+                            title: 'التحقق من رمز SMS',
+                            text: 'أدخل رمز التحقق المكون من 4 أرقام:',
+                            input: 'text',
+                            showCancelButton: true,
+                            confirmButtonText: 'تحقق',
+                            cancelButtonText: 'إلغاء'
+                        }).then((otpRes) => {
+                            if (otpRes.isConfirmed) {
+                                if (otpRes.value.trim() == otpCode) {
+                                    Swal.fire({
+                                        title: 'كلمة المرور الجديدة',
+                                        text: 'أدخل كلمة المرور الجديدة لحسابك:',
+                                        input: 'password',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'حفظ كلمة المرور الجديدة',
+                                        cancelButtonText: 'إلغاء'
+                                    }).then((newPassRes) => {
+                                        if (newPassRes.isConfirmed && newPassRes.value) {
+                                            targetUser.password = newPassRes.value;
+                                            setStorage(DB_KEY_USERS, dbUsers);
+                                            Swal.fire('تم بنجاح', 'تمت إعادة تعيين كلمة المرور بنجاح! يمكنك الآن تسجيل الدخول بها.', 'success');
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire('رمز خاطئ', 'رمز التحقق الذي أدخلته غير صحيح!', 'error');
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        }
+
+        function toggleTheme() {
+            const htmlTag = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            if (htmlTag.getAttribute('data-theme') === 'dark') {
+                htmlTag.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fa-solid fa-moon text-primary fs-5';
+            } else {
+                htmlTag.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fa-solid fa-sun text-warning fs-5';
+            }
+        }
+
+        function checkSystemNotifications() {
+            const listContainer = document.getElementById('notifications-list');
+            const badge = document.getElementById('notifications-badge');
+            let alerts = [];
+
+            const today = new Date();
+            dbAssignments.forEach(a => {
+                if (a.endDate) {
+                    const end = new Date(a.endDate);
+                    const diffDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+                    if (diffDays >= 0 && diffDays <= 30) {
+                        alerts.push(`تنتهي فترة تفويض المركبة (${a.plate}) للمندوب (${a.empName}) خلال ${diffDays} يوم.`);
+                    }
+                }
+            });
+
+            dbVehicles.forEach(v => {
+                if (v.status === 'صيانة') {
+                    alerts.push(`المركبة ذات اللوحة (${v.plate}) موجودة حالياً بالصيانة.`);
+                }
+            });
+
+            badge.innerText = alerts.length;
+            if (alerts.length > 0) {
+                listContainer.innerHTML = alerts.map(alt => `<div class="p-2 mb-2 bg-light rounded text-dark border-start border-3 border-warning">${alt}</div>`).join('');
+            } else {
+                listContainer.innerHTML = '<div class="text-center py-2 text-muted">لا توجد تنبيهات عاجلة حالياً 👍</div>';
+            }
+        }
+
+        function shareAssignmentWhatsApp(id) {
+            const asg = dbAssignments.find(a => a.id === id);
+            if (!asg) return;
+
+            const text = `*إشعار وتفويض استلام مركبة - شركة وتد الحياة للخدمات اللوجستية* 🚚\n\n` +
+                         `*رقم التفويض:* ${asg.id}\n` +
+                         `*السائق المفوض:* ${asg.empName}\n` +
+                         `*المدينة / المنطقة:* ${asg.region || 'الرياض'}\n` +
+                         `*رقم الهوية:* ${asg.nationalId}\n` +
+                         `*رقم اللوحة:* ${asg.plate}\n` +
+                         `*نوع المركبة:* ${asg.vehicleModel}\n` +
+                         `*تاريخ التفويض:* ${asg.startDate} حتى ${asg.endDate || 'مفتوح'}\n\n` +
+                         `يرجى الالتزام بالتعليمات والقيادة الآمنة. نتمنى لك التوفيق!`;
+
+            const encodedText = encodeURIComponent(text);
+            window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+        }
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(view => view.classList.add('d-none'));
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.remove('d-none');
+            }
+
+            document.querySelectorAll('.nav-link-custom').forEach(link => {
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            document.getElementById('sidebar').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
